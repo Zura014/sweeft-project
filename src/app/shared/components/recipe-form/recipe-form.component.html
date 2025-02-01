@@ -1,0 +1,113 @@
+<form
+  class="flex justify-center w-full"
+  [formGroup]="form"
+  (ngSubmit)="submitForm()"
+>
+  <fieldset class="flex flex-col items-center w-full max-w-sm gap-y-2 pt-12">
+    <fieldset class="flex flex-col w-full">
+      <label class="text-sm" for="title"> Title </label>
+      <input
+        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Title"
+      />
+    </fieldset>
+
+    <fieldset class="flex flex-col w-full">
+      <label class="text-sm" for="description"> Description </label>
+      <input
+        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
+        type="text"
+        id="description"
+        formControlName="description"
+        placeholder="Description"
+      />
+    </fieldset>
+
+    <fieldset formArrayName="ingredients" class="flex flex-col gap-y-2 w-full">
+      <div class="flex flex-col">
+        <label class="text-sm" for="ingredients">Ingredients</label>
+        <div class="relative max-w-sm">
+          <input
+            class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
+            type="text"
+            id="ingredients"
+            [formControl]="ingredientFormCtrl"
+            placeholder="Ingredients"
+            (keydown.enter)="$event.preventDefault(); addIngredient()"
+          />
+          <button
+            type="button"
+            class="absolute top-0.5 right-0 px-4 py-2 bg-indigo-500 text-white rounded-full w-fit"
+            (click)="addIngredient()"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+      <mat-chip-set aria-label="ingredient-tags"
+        >@for (ingredient of ingredients.controls; track ingredient.value +
+        $index) {
+        <mat-chip class="flex gap-2">
+          <span
+            >{{ ingredient.value }}
+            <button
+              type="button"
+              class="size-4 text-xs text-borderC bg-gray-700 rounded-full"
+              (click)="removeIngredient($index)"
+            >
+              X
+            </button>
+          </span>
+        </mat-chip>
+        }
+      </mat-chip-set>
+    </fieldset>
+
+    <fieldset class="flex flex-col w-full">
+      <label class="text-sm" for="instructions">Instructions</label>
+      <input
+        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
+        type="text"
+        formControlName="instructions"
+        id="instructions"
+        placeholder="Instructions"
+      />
+    </fieldset>
+
+    <fieldset class="flex flex-col w-full">
+      <label class="text-sm" for="imageUrl">Image url</label>
+      <input
+        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
+        type="text"
+        id="imageUrl"
+        formControlName="imageUrl"
+        placeholder="Image URL"
+      />
+    </fieldset>
+
+    <fieldset class="flex items-center gap-2">
+      <label class="text-sm" for="isFavorite">Favorite:</label>
+      <input id="isFavorite" type="checkbox" formControlName="isFavorite" />
+    </fieldset>
+
+    <button
+      type="submit"
+      class="max-w-sm w-full px-4 py-2 bg-green-700 text-white rounded"
+    >
+      Submit
+    </button>
+
+    @if (initialValues()) {
+    <button
+      type="button"
+      class="max-w-sm w-full px-4 py-2 bg-red-700 text-white rounded"
+      (click)="deleteRecipe()"
+    >
+      Delete
+    </button>
+    }
+  </fieldset>
+</form>
