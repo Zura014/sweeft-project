@@ -19,7 +19,7 @@ export class RecipeService {
 
   // BehaviorSubject to maintain and broadcast recipe state changes
   private readonly recipesSubject = new BehaviorSubject<RecipeI[]>([]);
-
+  
   // Public observable for components to subscribe to recipe changes
   public readonly recipes$ = this.recipesSubject.asObservable();
 

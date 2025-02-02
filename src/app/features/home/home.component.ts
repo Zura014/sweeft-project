@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { RecipeListComponent } from '../recipes/components/list/recipe-list.component';
-import { RouterLink } from '@angular/router';
-import { MatButton } from '@angular/material/button';
+import { HeaderComponent } from "../../shared/components/header/header.component";
 
 @Component({
   selector: 'app-home',
-  imports: [RecipeListComponent, RouterLink, MatButton],
+  imports: [RecipeListComponent, HeaderComponent],
   templateUrl: './home.component.html',
 })
 export class HomeComponent {}

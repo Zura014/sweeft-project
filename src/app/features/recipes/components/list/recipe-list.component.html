@@ -3,21 +3,23 @@
     <form>
       <mat-form-field class="pb-2 pt-6 border-b border-b-borderC w-full">
         <mat-label>Recipe</mat-label>
-        <input type="text" matInput [formControl]="searchControl" />
+        <input type="text" matInput (input)="onSearchTermChange($event)" />
       </mat-form-field>
     </form>
   </header>
-  <div
-    class="flex flex-col gap-y-2 py-4"
-    *ngIf="recipes$ | async as recipes; else loading"
-  >
-    <app-recipe-template
-      *ngFor="let recipe of recipes"
-      [recipe]="recipe"
-    ></app-recipe-template>
+  <div class="flex flex-col gap-y-2 py-4">
+    @if( filteredRecipes().length > 0 ) { 
+      @for(recipe of filteredRecipes(); track recipe) {
+        <app-recipe-template [recipe]="recipe"></app-recipe-template>
+      } 
+    } @else {
+      <div>
+        @if(isLoading()) {
+          <app-loading></app-loading>
+        } @else {
+          <p class="text-gray-500 text-center"> No recipes found. </p>
+        }
+      </div>
+    }
   </div>
 </section>
-
-<ng-template #loading>
-  <app-loading></app-loading>
-</ng-template>

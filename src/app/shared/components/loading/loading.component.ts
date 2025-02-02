@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
       width: 30px;
       height: 30px;
       position: relative;
-      border: 4px solid black;
+      border: 4px solid blue;
       animation: loader 2s infinite ease;
     }
     
@@ -22,7 +22,7 @@ import { Component } from '@angular/core';
       vertical-align: top;
       display: inline-block;
       width: 100%;
-      background-color: black;
+      background-color: blue;
       animation: loader-inner 2s infinite ease-in;
     }
     

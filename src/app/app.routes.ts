@@ -11,18 +11,22 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    title: 'Recipes - Home',
     path: 'home',
     component: HomeComponent,
   },
   {
+    title: 'Recipes - Create',
     path: 'submission',
     component: RecipeSubmissionComponent,
   },
   {
+    title: 'Recipes - Details',
     path: 'details/:id',
     component: RecipeDetailsComponent,
   },
   {
+    title: 'Recipes - Not found!',
     path: 'not-found',
     component: NotFoundComponent,
   },
