@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { RecipeI } from '../interfaces/recipe.interface';
 import { UpdateRecipeI } from '../interfaces/update-recipe.interface';
 import { CreateRecipeI } from '../interfaces/create-recipe.interface';
 
 /**
  * Service responsible for handling all recipe-related HTTP operations
- * and maintaining a local state of recipes using BehaviorSubject.
+ * and maintaining a local state of recipes using WritableSignal.
  */
 
 @Injectable({
@@ -17,11 +17,11 @@ export class RecipeService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:3000/recipes';
 
-  // BehaviorSubject to maintain and broadcast recipe state changes
-  private readonly recipesSubject = new BehaviorSubject<RecipeI[]>([]);
-  
-  // Public observable for components to subscribe to recipe changes
-  public readonly recipes$ = this.recipesSubject.asObservable();
+  // WritableSignal to maintain and broadcast recipe state changes
+  readonly #recipes = signal<RecipeI[]>([]);
+
+  // Public Signal for components to subscribe to recipe changes
+  public readonly recipes = computed(this.#recipes);
 
   constructor() {
     // Initialize the recipes state when service is instantiated
@@ -35,7 +35,7 @@ export class RecipeService {
   public getAllRecipes(): Observable<RecipeI[]> {
     return this.http
       .get<RecipeI[]>(this.apiUrl)
-      .pipe(tap((recipes) => this.recipesSubject.next(recipes)));
+      .pipe(tap((recipes) => this.#recipes.set(recipes)));
   }
 
   /**
@@ -55,8 +55,10 @@ export class RecipeService {
   public createRecipe(newRecipe: CreateRecipeI): Observable<RecipeI> {
     return this.http.post<RecipeI>(this.apiUrl, newRecipe).pipe(
       tap((createdRecipe) => {
-        const currentRecipes = this.recipesSubject.value;
-        this.recipesSubject.next([...currentRecipes, createdRecipe]);
+        this.#recipes.update((currentRecipes) => [
+          ...currentRecipes,
+          createdRecipe,
+        ]);
       })
     );
   }
@@ -73,11 +75,12 @@ export class RecipeService {
   ): Observable<RecipeI> {
     return this.http.patch<RecipeI>(`${this.apiUrl}/${id}`, updatedRecipe).pipe(
       tap((updatedRecipeResponse) => {
-        const currentRecipes = this.recipesSubject.value;
-        const updatedRecipes = currentRecipes
-          .filter((recipe) => recipe.id !== id)
-          .concat(updatedRecipeResponse);
-        this.recipesSubject.next(updatedRecipes);
+        this.#recipes.update((currentRecipes) => {
+          return [
+            ...currentRecipes.filter((recipe) => recipe.id !== id),
+            updatedRecipeResponse,
+          ];
+        });
       })
     );
   }
@@ -90,10 +93,9 @@ export class RecipeService {
   public deleteRecipe(id: string): Observable<RecipeI> {
     return this.http.delete<RecipeI>(`${this.apiUrl}/${id}`).pipe(
       tap((deletedRecipe) => {
-        const filteredRecipes = this.recipesSubject.value.filter(
-          (recipe) => recipe.id !== deletedRecipe.id
+        this.#recipes.update((currentRecipes) =>
+          currentRecipes.filter((recipe) => recipe.id !== deletedRecipe.id)
         );
-        this.recipesSubject.next(filteredRecipes);
       })
     );
   }
