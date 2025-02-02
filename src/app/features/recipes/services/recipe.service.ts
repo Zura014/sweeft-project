@@ -69,7 +69,7 @@ export class RecipeService {
    */
   public updateRecipe(
     id: string,
-    updatedRecipe: Partial<UpdateRecipeI>
+    updatedRecipe: UpdateRecipeI
   ): Observable<RecipeI> {
     return this.http.patch<RecipeI>(`${this.apiUrl}/${id}`, updatedRecipe).pipe(
       tap((updatedRecipeResponse) => {
@@ -81,6 +81,29 @@ export class RecipeService {
         this.recipesSubject.next(updatedRecipes);
       })
     );
+  }
+
+  /**
+   * Adds/Removes recipe as favorite
+   * @param id - Recipe identifier
+   * @param isFavorited - Updated favorite state
+   * @returns Observable of updated RecipeI
+   */
+  public toggleFavorite(id: string, isFavorite: boolean): Observable<RecipeI> {
+    return this.http
+      .patch<RecipeI>(`${this.apiUrl}/${id}`, {
+        isFavorite: isFavorite,
+      })
+      .pipe(
+        tap((updatedRecipeResponse) => {
+          const currentRecipes = this.recipesSubject.value;
+          const updatedRecipes = [
+            ...currentRecipes.filter((recipe) => recipe.id !== id),
+            updatedRecipeResponse,
+          ];
+          this.recipesSubject.next(updatedRecipes);
+        })
+      );
   }
 
   /**

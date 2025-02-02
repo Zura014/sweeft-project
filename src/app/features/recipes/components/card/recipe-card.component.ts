@@ -20,7 +20,7 @@ export class RecipeCardComponent {
   @Input() recipe?: RecipeI;
 
   recipeService = inject(RecipeService);
-  toastrService = inject(ToastrService);
+  toastr = inject(ToastrService);
 
   /* 
    * or newer approach
@@ -33,11 +33,11 @@ export class RecipeCardComponent {
       this.recipe.isFavorite = !this.recipe.isFavorite;
 
       this.recipeService
-        .updateRecipe(this.recipe.id, { isFavorite: this.recipe.isFavorite })
+        .toggleFavorite(this.recipe.id, this.recipe.isFavorite)
         .subscribe({
           next: (res) => {
             this.recipe = { ...this.recipe!, isFavorite: res.isFavorite }; // Ensure immutability
-            this.toastrService.success(
+            this.toastr.success(
               this.recipe!.isFavorite
                 ? 'Recipe favorited successfully!'
                 : 'Recipe unfavorited Successfully',

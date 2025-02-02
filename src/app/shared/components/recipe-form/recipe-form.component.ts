@@ -1,10 +1,11 @@
 import {
   Component,
   computed,
+  EventEmitter,
   inject,
-  input,
+  Input,
   OnInit,
-  output,
+  Output,
   signal,
 } from '@angular/core';
 import { RecipeForm } from './types/recipe-form.type';
@@ -19,7 +20,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { RecipeService } from '../../../features/recipes/services/recipe.service';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap, take } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatChipsModule } from '@angular/material/chips';
 
@@ -33,9 +33,19 @@ export class RecipeFormComponent implements OnInit {
   private recipeService = inject(RecipeService);
   private route = inject(ActivatedRoute);
 
-  initialValues = input<RecipeForm>();
-  submitEvent = output<RecipeForm>();
-  error = output<HttpErrorResponse>();
+  @Input() initialValues?: RecipeForm;
+
+  @Output() submitEvent = new EventEmitter<RecipeForm>();
+  @Output() error = new EventEmitter<HttpErrorResponse>();
+
+  /*/////////////////////////////////////////|
+  | * didn't use signal approaches, because  |
+  | * task recommended using decorators.     |
+  | initialValues = input<RecipeForm>();     |
+  | submitEvent = output<RecipeForm>();      |
+  | error = output<HttpErrorResponse>();     |
+  ///////////////////////////////////////////|
+  */
 
   ingredientFormCtrl = new FormControl('', [Validators.required]);
 
@@ -56,7 +66,7 @@ export class RecipeFormComponent implements OnInit {
   hasError = computed(() => this.form.touched && !this.form.valid);
 
   ngOnInit(): void {
-    const values = this.initialValues();
+    const values = this.initialValues;
 
     if (values) {
       this.form.patchValue({
@@ -99,24 +109,5 @@ export class RecipeFormComponent implements OnInit {
       this.submitEvent.emit(this.form.getRawValue() as RecipeForm);
     }
     this.isSubmitting.set(false);
-  }
-
-  deleteRecipe(): void {
-    if (confirm('Are you sure you want to delete this recipe?')) {
-      this.route.params
-        .pipe(
-          take(1),
-          map((params) => params['id']),
-          switchMap((projectId) => this.recipeService.deleteRecipe(projectId))
-        )
-        .subscribe({
-          next: () => {
-            alert('Recipe deleted successfully!');
-          },
-          error: (e) => {
-            this.error.emit(e);
-          },
-        });
-    }
   }
 }

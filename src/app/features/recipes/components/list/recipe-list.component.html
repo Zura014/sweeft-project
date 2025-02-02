@@ -1,39 +1,69 @@
+<!-- Main section for recipe listing -->
 <section>
-  <!-- Top part of list -->
+  <!-- Header containing the search form and filter options -->
   <header>
-    <form>
-      <mat-form-field class="pb-2 pt-6 border-b border-b-borderC w-full">
-        <mat-label>Recipe</mat-label>
-        <input type="text" matInput [formControl]="searchControl" />
+    <form
+      class="flex items-center justify-between flex-col sm:flex-row gap-x-6 border-b py-2 border-b-borderC w-full"
+    >
+      <!-- Search input field -->
+      <mat-form-field class="w-full sm:w-1/2 md:w-2/3 pt-4">
+        <mat-label>Search Recipes</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="searchControl"
+          (keydown.enter)="$event.preventDefault()"
+          placeholder="Enter recipe name or description"
+        />
       </mat-form-field>
+
+      <!-- Filter buttons for sorting recipes -->
+      <mat-button-toggle-group
+        (change)="handleFilterChange($event)"
+        name="filterRecipes"
+        aria-label="Filter Recipes"
+        [value]="recipeFilter()"
+      >
+        <mat-button-toggle value="all">All</mat-button-toggle>
+        <mat-button-toggle value="favorited">Favorited</mat-button-toggle>
+        <mat-button-toggle value="not_favorited"
+          >Not Favorited</mat-button-toggle
+        >
+      </mat-button-toggle-group>
     </form>
   </header>
 
-  <main class="py-4" *ngIf="recipes$ | async as recipes; else notFetched">
+  <!-- Main content area for displaying recipes -->
+  <main class="py-4" *ngIf="recipes$ | async as recipes; else loadingOrError">
+    <!-- Grid layout for recipe cards -->
     <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       *ngIf="recipes.length > 0; else noRecipes"
     >
-      <app-recipe-card
-        *ngFor="let recipe of recipes"
-        [recipe]="recipe"
-      ></app-recipe-card>
+      <!-- Loop through recipes and display each as a card -->
+      @for(recipe of recipes; track recipe.id) {
+      <app-recipe-card [recipe]="recipe"></app-recipe-card>
+      }
     </div>
   </main>
 </section>
 
+<!-- Template for when no recipes match the search criteria -->
 <ng-template #noRecipes>
-  @if(isLoading()) {
-  <app-loading></app-loading>
-  } @else {
-  <p class="text-gray-500 text-center">No recipes found.</p>
-  }
+  <p class="text-gray-500 text-center">
+    No recipes found matching your criteria.
+  </p>
 </ng-template>
 
-<ng-template #notFetched>
+<!-- Template for handling loading state or errors -->
+<ng-template #loadingOrError>
   @if(isLoading()) {
+  <!-- Display loading component while fetching data -->
   <app-loading></app-loading>
   } @else {
-  <p class="text-gray-500 text-center">Failed to fetch recipes.</p>
+  <!-- Display error message if data loading fails -->
+  <p class="text-gray-500 text-center mt-4">
+    Unable to load recipes. Please try again later.
+  </p>
   }
 </ng-template>
