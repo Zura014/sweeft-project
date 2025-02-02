@@ -1,91 +1,91 @@
 {
-    "recipes": [
-        {
-            "id": "1",
-            "title": "Spaghetti Carbonara",
-            "description": "A classic Italian pasta dish with eggs, cheese, pancetta, and pepper.",
-            "ingredients": [
-                "Spaghetti",
-                "Eggs",
-                "Parmesan Cheese",
-                "Pancetta",
-                "Black Pepper"
-            ],
-            "instructions": "1. Cook spaghetti according to package directions.\n2. While pasta cooks, in a bowl, whisk eggs and Parmesan cheese.\n3. In a separate pan, cook pancetta until crispy.\n4. Drain the spaghetti, reserving some pasta water.\n5. Add the pasta to the pan with the pancetta.  Toss to combine.\n6. Remove from heat and quickly add the egg and cheese mixture, tossing constantly. The heat from the pasta will cook the eggs.\n7. Add a little pasta water if needed to create a creamy sauce.\n8. Season with black pepper and serve immediately.",
-            "imageUrl": "https://example.com/images/spaghetti-carbonara.jpg",
-            "isFavorite": true
-        },
-        {
-            "id": "2",
-            "title": "Chicken Stir-Fry",
-            "description": "A quick and easy stir-fry with chicken and vegetables.",
-            "ingredients": [
-                "Chicken Breast",
-                "Broccoli",
-                "Carrots",
-                "Bell Peppers",
-                "Soy Sauce",
-                "Ginger",
-                "Garlic",
-                "Rice"
-            ],
-            "instructions": "1. Cut chicken and vegetables into bite-sized pieces.\n2. Marinate chicken in soy sauce, ginger, and garlic.\n3. Stir-fry chicken until cooked through.\n4. Add vegetables and stir-fry until tender-crisp.\n5. Serve over rice.",
-            "imageUrl": "https://example.com/images/chicken-stir-fry.jpg",
-            "isFavorite": false
-        },
-        {
-            "id": "3",
-            "title": "Chocolate Chip Cookies",
-            "description": "Classic chocolate chip cookies, perfect for any occasion.",
-            "ingredients": [
-                "Flour",
-                "Sugar",
-                "Brown Sugar",
-                "Butter",
-                "Eggs",
-                "Vanilla Extract",
-                "Chocolate Chips",
-                "Baking Soda"
-            ],
-            "instructions": "1. Cream together butter and sugars.\n2. Beat in eggs and vanilla.\n3. Mix in flour, baking soda, and chocolate chips.\n4. Bake at 375°F for 10-12 minutes.",
-            "imageUrl": "https://example.com/images/chocolate-chip-cookies.jpg",
-            "isFavorite": true
-        },
-        {
-            "id": "4",
-            "title": "Vegetarian Chili",
-            "description": "A hearty and flavorful vegetarian chili.",
-            "ingredients": [
-                "Kidney Beans",
-                "Black Beans",
-                "Diced Tomatoes",
-                "Onion",
-                "Garlic",
-                "Chili Powder",
-                "Cumin",
-                "Corn"
-            ],
-            "instructions": "1. Sauté onion and garlic.\n2. Add beans, tomatoes, chili powder, cumin, and corn.\n3. Simmer for 30 minutes.",
-            "imageUrl": "https://example.com/images/vegetarian-chili.jpg",
-            "isFavorite": false
-        },
-        {
-            "id": "5",
-            "title": "Salmon with Roasted Vegetables",
-            "description": "Healthy and delicious salmon with roasted vegetables.",
-            "ingredients": [
-                "Salmon Fillets",
-                "Asparagus",
-                "Potatoes",
-                "Carrots",
-                "Olive Oil",
-                "Lemon Juice",
-                "Salt",
-                "Pepper"
-            ],
-            "instructions": "1. Toss vegetables with olive oil, lemon juice, salt, and pepper.\n2. Roast at 400°F for 20 minutes.\n3. Add salmon and roast for another 10-15 minutes.",
-            "imageUrl": "https://example.com/images/salmon-roasted-vegetables.jpg",
-            "isFavorite": true
-        }
-    ]
+  "recipes": [
+    {
+      "id": "1",
+      "title": "Spaghetti Carbonara",
+      "description": "A classic Italian pasta dish with eggs, cheese, pancetta, and pepper.",
+      "ingredients": [
+        "Spaghetti",
+        "Parmesan Cheese",
+        "Pancetta",
+        "Eggs",
+        "Black Pepper"
+      ],
+      "instructions": "1. Cook spaghetti according to package directions.\n2. While pasta cooks, in a bowl, whisk eggs and Parmesan cheese.\n3. In a separate pan, cook pancetta until crispy.\n4. Drain the spaghetti, reserving some pasta water.\n5. Add the pasta to the pan with the pancetta. Toss to combine.\n6. Remove from heat and quickly add the egg and cheese mixture, tossing constantly. The heat from the pasta will cook the eggs.\n7. Add a little pasta water if needed to create a creamy sauce.\n8. Season with black pepper and serve immediately.",
+      "imageUrl": "https://images.unsplash.com/photo-1608756687911-aa1599ab3bd9?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "isFavorite": true
+    },
+    {
+      "id": "2",
+      "title": "Chicken Stir-Fry",
+      "description": "A quick and easy stir-fry with chicken and vegetables.",
+      "ingredients": [
+        "Chicken Breast",
+        "Broccoli",
+        "Carrots",
+        "Bell Peppers",
+        "Soy Sauce",
+        "Ginger",
+        "Garlic",
+        "Rice"
+      ],
+      "instructions": "1. Cut chicken and vegetables into bite-sized pieces.\n2. Marinate chicken in soy sauce, ginger, and garlic.\n3. Stir-fry chicken until cooked through.\n4. Add vegetables and stir-fry until tender-crisp.\n5. Serve over rice.",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1664475934279-2631a25c42ce?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "isFavorite": false
+    },
+    {
+      "id": "3",
+      "title": "Chocolate Chip Cookies",
+      "description": "Classic chocolate chip cookies, perfect for any occasion.",
+      "ingredients": [
+        "Flour",
+        "Sugar",
+        "Brown Sugar",
+        "Butter",
+        "Eggs",
+        "Vanilla Extract",
+        "Chocolate Chips",
+        "Baking Soda"
+      ],
+      "instructions": "1. Cream together butter and sugars.\n2. Beat in eggs and vanilla.\n3. Mix in flour, baking soda, and chocolate chips.\n4. Bake at 375°F for 10-12 minutes.",
+      "imageUrl": "https://images.unsplash.com/photo-1625876981820-be17a6807189?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "isFavorite": true
+    },
+    {
+      "id": "4",
+      "title": "Vegetarian Chili",
+      "description": "A hearty and flavorful vegetarian chili.",
+      "ingredients": [
+        "Kidney Beans",
+        "Black Beans",
+        "Diced Tomatoes",
+        "Onion",
+        "Garlic",
+        "Chili Powder",
+        "Cumin",
+        "Corn"
+      ],
+      "instructions": "1. Sauté onion and garlic.\n2. Add beans, tomatoes, chili powder, cumin, and corn.\n3. Simmer for 30 minutes.",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1712678664930-ef7051cd1b31?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "isFavorite": false
+    },
+    {
+      "id": "5",
+      "title": "Salmon with Roasted Vegetables",
+      "description": "Healthy and delicious salmon with roasted vegetables.",
+      "ingredients": [
+        "Salmon Fillets",
+        "Asparagus",
+        "Potatoes",
+        "Carrots",
+        "Olive Oil",
+        "Lemon Juice",
+        "Salt",
+        "Pepper"
+      ],
+      "instructions": "1. Toss vegetables with olive oil, lemon juice, salt, and pepper.\n2. Roast at 400°F for 20 minutes.\n3. Add salmon and roast for another 10-15 minutes.",
+      "imageUrl": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
+      "isFavorite": true
+    }
+  ]
 }

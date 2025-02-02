@@ -1,1 +1,12 @@
-<h1>details works!</h1>
+<div class="max-w-screen-xxl mx-auto px-2 sm:p-4 md:p-6">
+  <header>
+    <h1 class="text-4xl pb-4 border-b border-b-borderC">Recipe Details</h1>
+  </header>
+  <section *ngIf="recipe$ | async as recipe">
+    <app-recipe-form
+      [initialValues]="initialValues"
+      (submitEvent)="onSubmit($event)"
+      (error)="onError($event)"
+    ></app-recipe-form>
+  </section>
+</div>

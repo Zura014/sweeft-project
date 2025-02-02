@@ -12,7 +12,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
-import { RecipeTemplateComponent } from '../template/recipe-template.component';
+import { RecipeCardComponent } from '../card/recipe-card.component';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import {
   debounceTime,
@@ -35,7 +35,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    RecipeTemplateComponent,
+    RecipeCardComponent,
     ReactiveFormsModule,
     LoadingComponent,
   ],

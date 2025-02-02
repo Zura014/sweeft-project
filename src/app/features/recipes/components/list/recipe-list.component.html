@@ -11,13 +11,13 @@
 
   <main class="py-4" *ngIf="recipes$ | async as recipes; else notFetched">
     <div
-      class="flex flex-col gap-y-2"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2"
       *ngIf="recipes.length > 0; else noRecipes"
     >
-      <app-recipe-template
+      <app-recipe-card
         *ngFor="let recipe of recipes"
         [recipe]="recipe"
-      ></app-recipe-template>
+      ></app-recipe-card>
     </div>
   </main>
 </section>

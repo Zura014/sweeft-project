@@ -1,8 +1,20 @@
 <header
-  class="flex w-full justify-between border-b border-b-borderC items-center pb-4"
+  class="flex flex-col relative bg-white max-w-screen-xxl mx-auto py-1 sm:py-2 md:py-4 px-2 sm:px-4 md:px-6 border rounded-md rounded-t-none border-t-0 border-borderC"
 >
-  <h1 class="text-4xl">Explore!</h1>
-  <div class="text-sm flex items-center gap-x-2">
-    <button mat-flat-button [routerLink]="['/submission']">Create new</button>
+  <nav class="flex justify-between w-full py-2">
+    <button mat-button class="size-fit" [routerLink]="['/']" aria-label="Home">
+      <mat-icon>home</mat-icon>
+      Home
+    </button>
+
+    <div class="text-sm flex items-center gap-x-2">
+      <button mat-flat-button [routerLink]="['/submission']">Create new</button>
+    </div>
+  </nav>
+  <div class="absolute -bottom-1 left-0 w-full">
+    <mat-progress-bar
+      *ngIf="isLoading$ | async"
+      mode="indeterminate"
+    ></mat-progress-bar>
   </div>
 </header>

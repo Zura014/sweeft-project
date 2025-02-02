@@ -69,7 +69,7 @@ export class RecipeService {
    */
   public updateRecipe(
     id: string,
-    updatedRecipe: UpdateRecipeI
+    updatedRecipe: Partial<UpdateRecipeI>
   ): Observable<RecipeI> {
     return this.http.patch<RecipeI>(`${this.apiUrl}/${id}`, updatedRecipe).pipe(
       tap((updatedRecipeResponse) => {
