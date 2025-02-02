@@ -1,25 +1,39 @@
 <section>
+  <!-- Top part of list -->
   <header>
     <form>
       <mat-form-field class="pb-2 pt-6 border-b border-b-borderC w-full">
         <mat-label>Recipe</mat-label>
-        <input type="text" matInput (input)="onSearchTermChange($event)" />
+        <input type="text" matInput [formControl]="searchControl" />
       </mat-form-field>
     </form>
   </header>
-  <div class="flex flex-col gap-y-2 py-4">
-    @if( filteredRecipes().length > 0 ) { 
-      @for(recipe of filteredRecipes(); track recipe) {
-        <app-recipe-template [recipe]="recipe"></app-recipe-template>
-      } 
-    } @else {
-      <div>
-        @if(isLoading()) {
-          <app-loading></app-loading>
-        } @else {
-          <p class="text-gray-500 text-center"> No recipes found. </p>
-        }
-      </div>
-    }
-  </div>
+
+  <main class="py-4" *ngIf="recipes$ | async as recipes; else notFetched">
+    <div
+      class="flex flex-col gap-y-2"
+      *ngIf="recipes.length > 0; else noRecipes"
+    >
+      <app-recipe-template
+        *ngFor="let recipe of recipes"
+        [recipe]="recipe"
+      ></app-recipe-template>
+    </div>
+  </main>
 </section>
+
+<ng-template #noRecipes>
+  @if(isLoading()) {
+  <app-loading></app-loading>
+  } @else {
+  <p class="text-gray-500 text-center">No recipes found.</p>
+  }
+</ng-template>
+
+<ng-template #notFetched>
+  @if(isLoading()) {
+  <app-loading></app-loading>
+  } @else {
+  <p class="text-gray-500 text-center">Failed to fetch recipes.</p>
+  }
+</ng-template>
