@@ -37,6 +37,8 @@ import { RecipeFilterType } from '../../types/recipe-filter.type';
 
 @Component({
   selector: 'app-recipe-list',
+  templateUrl: './recipe-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush, // Using OnPush strategy for better performance
   imports: [
     NgIf,
     AsyncPipe,
@@ -47,8 +49,6 @@ import { RecipeFilterType } from '../../types/recipe-filter.type';
     ReactiveFormsModule,
     LoadingComponent,
   ],
-  templateUrl: './recipe-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush, // Using OnPush strategy for better performance
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   // Injecting the RecipeService for data fetching
@@ -58,21 +58,26 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   // BehaviorSubject to handle filter state changes
-  private readonly filterSubject = new BehaviorSubject<RecipeFilterType>('all');
+  protected readonly filterSubject = new BehaviorSubject<RecipeFilterType>(
+    'all'
+  );
 
   // Signals for reactive state management
-  protected readonly recipeFilter = signal<RecipeFilterType>('all');
   protected readonly isLoading = signal(true);
-  protected readonly searchControl = new FormControl('');
+  protected readonly searchControl = new FormControl<string>('');
 
   // Observable for the list of recipes
   protected recipes$?: Observable<RecipeI[]>;
 
   ngOnInit(): void {
-    this.initializeRecipeStream();
+    this.configureRecipeStream();
   }
 
-  private initializeRecipeStream(): void {
+  /**
+   * Initializes the reactive stream for recipes, combining search and filter observables.
+   * This method sets up the pipeline to fetch and filter recipes based on user interactions.
+   */
+  private configureRecipeStream(): void {
     // Setting up observables for search and filter
     const search$ = this.searchControl.valueChanges.pipe(
       startWith(''), // Start with an empty query to fetch all recipes initially
@@ -82,58 +87,39 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
     const filter$ = this.filterSubject.asObservable();
 
+    this.isLoading.set(true);
+
     this.recipes$ = combineLatest([search$, filter$]).pipe(
       takeUntil(this.destroy$), // Unsubscribe when component is destroyed
-      tap(() => this.isLoading.set(true)), // Set loading state to true before fetching
-      switchMap(([query, filter]) => this.fetchAndFilterRecipes(query, filter)),
-      catchError(() => {
-        this.isLoading.set(false); // If there's an error, stop loading indicator
-        return EMPTY; // Return an empty observable to avoid errors in the subscription
-      }),
-      tap(() => this.isLoading.set(false)) // Set loading to false after data is processed or error occurred
+      switchMap(([query, filter]) =>
+        this.recipeService.getAllRecipes(query ?? undefined, filter).pipe(
+          catchError((err) => {
+            /**
+             * I would also handle an error here if the error was dynamic,
+             * but it can only occur when the JSON server is down and can't
+             * fetch recipes, so the error message is hard-coded in the template.
+             * If it were dynamic, I would create a function to handle it:
+             * - Import and use an AlertComponent, which I would create specifically for this purpose.
+             * - Declare an `errorMessage` signal to track errors.
+             * - Assign the error to this signal and use it via data binding.
+             * - The AlertComponent would be a 'dumb' component, meaning it relies on data being passed to it
+             *   through the `@Input` decorator.
+             */
+            console.error(err);
+            this.isLoading.set(false);
+            return EMPTY;
+          }),
+          tap(() => this.isLoading.set(false)) // handling loading state.
+        )
+      )
     );
   }
 
-  private fetchAndFilterRecipes(
-    query: string | null,
-    filter: RecipeFilterType
-  ): Observable<RecipeI[]> {
-    return this.recipeService
-      .getAllRecipes() // Fetch all recipes from the service
-      .pipe(map((recipes) => this.applyFilters(recipes, query, filter))); // Apply filters
-  }
-
-  private applyFilters(
-    recipes: RecipeI[],
-    query: string | null,
-    filterType: RecipeFilterType
-  ): RecipeI[] {
-    let filteredRecipes = recipes;
-
-    // Filter by search query if provided
-    if (query?.trim()) {
-      const normalizedQuery = query.toLowerCase();
-      filteredRecipes = recipes.filter(
-        (recipe) =>
-          recipe.title.toLowerCase().includes(normalizedQuery) ||
-          recipe.description.toLowerCase().includes(normalizedQuery)
-      );
-    }
-
-    // Filter by favorite status
-    if (filterType !== 'all') {
-      const isFavorite = filterType === 'favorited';
-      filteredRecipes = filteredRecipes.filter(
-        (recipe) => recipe.isFavorite === isFavorite
-      );
-    }
-
-    return filteredRecipes;
-  }
-
+  /**
+   * Handles changes in the filter toggle buttons, updating both the signal and the subject.
+   * @param event - The change event from MatButtonToggle.
+   */
   protected handleFilterChange(event: MatButtonToggleChange): void {
-    // Update both the signal and the subject on filter change
-    this.recipeFilter.set(event.value);
     this.filterSubject.next(event.value);
   }
 

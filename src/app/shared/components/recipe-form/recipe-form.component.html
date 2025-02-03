@@ -1,103 +1,191 @@
 <form
-  class="flex justify-center w-full"
+  class="flex justify-center w-full py-12 items-center"
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
-  <fieldset class="flex flex-col items-center w-full max-w-sm gap-y-2 pt-12">
-    <fieldset class="flex flex-col w-full">
-      <label class="text-sm" for="title"> Title </label>
-      <input
-        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
-        type="text"
-        id="title"
-        formControlName="title"
-        placeholder="Title"
-      />
-    </fieldset>
+  <mat-card class="w-full max-w-lg h-full">
+    <mat-card-content class="space-y-3">
+      <!-- Title Input Field -->
+      <mat-form-field class="w-full">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          type="text"
+          id="title"
+          formControlName="title"
+          placeholder="Title"
+          aria-label="Recipe Title"
+        />
+        <mat-error
+          *ngIf="form.get('title')?.hasError('required')"
+          id="title-required"
+        >
+          Title is required
+        </mat-error>
+        <mat-error
+          *ngIf="form.get('title')?.hasError('minlength')"
+          id="title-minlength"
+        >
+          Title must be at least 3 characters long
+        </mat-error>
+        <mat-error
+          *ngIf="form.get('title')?.hasError('maxlength')"
+          id="title-maxlength"
+        >
+          Title cannot exceed 50 characters
+        </mat-error>
+      </mat-form-field>
 
-    <fieldset class="flex flex-col w-full">
-      <label class="text-sm" for="description"> Description </label>
-      <input
-        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
-        type="text"
-        id="description"
-        formControlName="description"
-        placeholder="Description"
-      />
-    </fieldset>
+      <!-- Description Input Field -->
+      <mat-form-field class="w-full">
+        <mat-label>Description</mat-label>
+        <input
+          matInput
+          type="text"
+          id="description"
+          formControlName="description"
+          placeholder="Description"
+          aria-label="Recipe Description"
+        />
+        <mat-error
+          *ngIf="form.get('description')?.hasError('required')"
+          id="description-required"
+        >
+          Description is required
+        </mat-error>
+        <mat-error
+          *ngIf="form.get('description')?.hasError('minlength')"
+          id="description-minlength"
+        >
+          Description must be at least 10 characters long
+        </mat-error>
+        <mat-error
+          *ngIf="form.get('description')?.hasError('maxlength')"
+          id="description-maxlength"
+        >
+          Description cannot exceed 500 characters
+        </mat-error>
+      </mat-form-field>
 
-    <fieldset formArrayName="ingredients" class="flex flex-col gap-y-2 w-full">
-      <div class="flex flex-col">
-        <label class="text-sm" for="ingredients">Ingredients</label>
-        <div class="relative max-w-sm">
+      <!-- Ingredients -->
+      <div formArrayName="ingredients">
+        <mat-form-field class="w-full">
+          <mat-label>Ingredients</mat-label>
           <input
-            class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
+            matInput
             type="text"
             id="ingredients"
             [formControl]="ingredientFormCtrl"
             placeholder="Ingredients"
+            aria-label="Add Ingredient"
             (keydown.enter)="$event.preventDefault(); addIngredient()"
           />
           <button
+            mat-icon-button
+            matSuffix
             type="button"
-            class="absolute top-0.5 right-0 px-4 py-2 bg-indigo-500 text-white rounded-full w-fit"
             (click)="addIngredient()"
           >
-            Add
+            <mat-icon>add</mat-icon>
           </button>
-        </div>
-      </div>
-      <mat-chip-set aria-label="ingredient-tags"
-        >@for (ingredient of ingredients.controls; track ingredient.value +
-        $index) {
-        <mat-chip class="flex gap-2">
-          <span
-            >{{ ingredient.value }}
+          <mat-error
+            *ngIf="form.get('ingredients')?.hasError('required')"
+            id="ingredients-required"
+          >
+            At least one ingredient is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Display Ingredients as Chips -->
+        <mat-chip-set aria-label="ingredient-tags">
+          @for (ingredient of ingredients.controls; track ingredient.value +
+          $index) {
+          <mat-chip>
+            {{ ingredient.value }}
             <button
-              type="button"
-              class="size-4 text-xs text-borderC bg-gray-300 rounded-full"
+              mat-icon-button
+              matChipRemove
               (click)="removeIngredient($index)"
             >
-              X
+              <mat-icon>cancel</mat-icon>
             </button>
-          </span>
-        </mat-chip>
-        }
-      </mat-chip-set>
-    </fieldset>
+          </mat-chip>
+          }
+        </mat-chip-set>
+      </div>
 
-    <fieldset class="flex flex-col w-full">
-      <label class="text-sm" for="instructions">Instructions</label>
-      <input
-        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
-        type="text"
-        formControlName="instructions"
-        id="instructions"
-        placeholder="Instructions"
-      />
-    </fieldset>
+      <!-- Instructions Textarea -->
+      <mat-form-field class="w-full">
+        <mat-label>Instructions</mat-label>
+        <textarea
+          matInput
+          id="instructions"
+          formControlName="instructions"
+          placeholder="Instructions"
+          aria-label="Recipe Instructions"
+        ></textarea>
+        <mat-error
+          *ngIf="form.get('instructions')?.hasError('required')"
+          id="instructions-required"
+        >
+          Instructions are required
+        </mat-error>
+        <mat-error
+          *ngIf="form.get('instructions')?.hasError('minlength')"
+          id="instructions-minlength"
+        >
+          Instructions must be at least 20 characters long
+        </mat-error>
+      </mat-form-field>
 
-    <fieldset class="flex flex-col w-full">
-      <label class="text-sm" for="imageUrl">Image url</label>
-      <input
-        class="py-2 px-1.5 border border-borderC rounded-md w-full max-w-sm"
-        type="text"
-        id="imageUrl"
-        formControlName="imageUrl"
-        placeholder="Image URL"
-      />
-    </fieldset>
+      <div
+        class="flex sm:flex-row flex-col justify-between gap-x-4 items-center"
+      >
+        <!-- Image URL Input -->
+        <mat-form-field class="w-full sm:w-1/2 md:w-3/4 h-fit">
+          <mat-label>Image URL</mat-label>
+          <input
+            matInput
+            type="text"
+            id="imageUrl"
+            formControlName="imageUrl"
+            placeholder="Image URL"
+            aria-label="Image URL"
+          />
+          <mat-error
+            *ngIf="form.get('imageUrl')?.hasError('required')"
+            id="imageUrl-required"
+          >
+            Image URL is required
+          </mat-error>
+          <mat-error
+            *ngIf="form.get('imageUrl')?.hasError('pattern')"
+            id="imageUrl-pattern"
+          >
+            Please enter a valid image URL (e.g., http://example.com/image.jpg)
+          </mat-error>
+        </mat-form-field>
+        <!-- Image Preview -->
+        <img
+          [src]="form.get('imageUrl')?.value || null"
+          *ngIf="form.get('imageUrl')?.value"
+          class="w-full sm:w-1/2 md:w-1/4 rounded"
+          alt="Recipe Image Preview"
+        />
+      </div>
+      <!-- Favorite Checkbox -->
+      <mat-checkbox
+        formControlName="isFavorite"
+        class="my-2"
+        aria-label="Mark as Favorite"
+      >
+        Mark as Favorite
+      </mat-checkbox>
 
-    <fieldset class="flex items-center gap-2">
-      <label class="text-sm" for="isFavorite">Favorite:</label>
-      <input id="isFavorite" type="checkbox" formControlName="isFavorite" />
-    </fieldset>
-
-    <button
-      type="submit"
-      class="max-w-sm w-full px-4 py-2 bg-blue-600 text-white rounded"
-    >
-      Submit
-    </button>
-  </fieldset>
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit" class="w-full">
+        Submit
+      </button>
+    </mat-card-content>
+  </mat-card>
 </form>

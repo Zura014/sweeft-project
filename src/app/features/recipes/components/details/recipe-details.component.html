@@ -1,5 +1,5 @@
 <div class="max-w-screen-xxl mx-auto px-4 py-8">
-  <div *ngIf="recipe$ | async as recipe" class="space-y-8">
+  <div *ngIf="currentRecipe$ | async as recipe" class="space-y-8">
     <!-- Header Section -->
     <header class="border-b border-borderC pb-6">
       <div class="flex justify-between items-center">
@@ -19,7 +19,7 @@
       <img
         [src]="recipe.imageUrl"
         [alt]="recipe.title"
-        class="w-full h-[400px] object-cover rounded-lg shadow-lg"
+        class="w-full max-h-[400px] object-cover rounded-lg shadow-lg"
       />
       <div class="space-y-4">
         <h2 class="text-2xl font-semibold">Description</h2>
@@ -46,14 +46,14 @@
     </div>
 
     <!-- Edit Form Section -->
-    <div *ngIf="isEditing()" class="mt-8">
+    <ng-container *ngIf="isEditing()" class="mt-8">
       <h2 class="text-2xl font-semibold mb-4">Edit Recipe</h2>
       <app-recipe-form
         [initialValues]="initialValues"
         (submitEvent)="onSubmit($event)"
         (error)="onError($event)"
       ></app-recipe-form>
-    </div>
+    </ng-container>
 
     <!-- if the form is submitting -->
     <app-loading *ngIf="isLoading()"></app-loading>

@@ -25,9 +25,7 @@ export const routes: Routes = [
     title: 'Recipes - Details',
     path: 'details/:id',
     component: RecipeDetailsComponent,
-    resolve: {
-      recipe: recipeResolver,
-    },
+    resolve: { recipeResolver },
   },
   {
     title: 'Recipes - Not found!',

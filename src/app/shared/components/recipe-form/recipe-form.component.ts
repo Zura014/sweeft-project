@@ -1,93 +1,112 @@
 import {
   Component,
-  computed,
-  EventEmitter,
   inject,
   Input,
   OnInit,
   Output,
-  signal,
+  EventEmitter,
 } from '@angular/core';
 import { RecipeForm } from './types/recipe-form.type';
 import {
-  FormArray,
   FormBuilder,
   FormControl,
-  FormsModule,
+  FormArray,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RecipeService } from '../../../features/recipes/services/recipe.service';
-import { ActivatedRoute } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { computed } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatChipsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatChipsModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
 })
 export class RecipeFormComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private recipeService = inject(RecipeService);
-  private route = inject(ActivatedRoute);
 
   @Input() initialValues?: RecipeForm;
-
   @Output() submitEvent = new EventEmitter<RecipeForm>();
   @Output() error = new EventEmitter<HttpErrorResponse>();
 
-  /*/////////////////////////////////////////|
-  | * didn't use signal approaches, because  |
-  | * task recommended using decorators.     |
-  | initialValues = input<RecipeForm>();     |
-  | submitEvent = output<RecipeForm>();      |
-  | error = output<HttpErrorResponse>();     |
-  ///////////////////////////////////////////|
-  */
-
+  // Control for adding new ingredients
   ingredientFormCtrl = new FormControl('', [Validators.required]);
 
+  // Main form group
   form = this.fb.nonNullable.group({
-    title: ['', [Validators.required]],
-    description: ['', [Validators.required]],
+    title: [
+      '',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(50)],
+    ],
+    description: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(500),
+      ],
+    ],
     ingredients: this.fb.array([], [Validators.required]),
-    instructions: ['', [Validators.required]],
-    imageUrl: ['', [Validators.required]],
-    isFavorite: [false, [Validators.required]],
+    instructions: ['', [Validators.required, Validators.minLength(20)]],
+    imageUrl: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(
+          /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+        ),
+      ],
+    ],
+    isFavorite: [false],
   });
 
   get ingredients(): FormArray {
     return this.form.get('ingredients') as FormArray;
   }
 
-  isSubmitting = signal(false);
+  // Computed property to check if form has errors
   hasError = computed(() => this.form.touched && !this.form.valid);
 
   ngOnInit(): void {
-    const values = this.initialValues;
-
-    if (values) {
+    if (this.initialValues) {
       this.form.patchValue({
-        title: values.title,
-        description: values.description,
-        ingredients: values.ingredients,
-        instructions: values.instructions,
-        imageUrl: values.imageUrl,
-        isFavorite: values.isFavorite,
+        title: this.initialValues.title,
+        description: this.initialValues.description,
+        instructions: this.initialValues.instructions,
+        imageUrl: this.initialValues.imageUrl,
+        isFavorite: this.initialValues.isFavorite,
       });
-      if (values.ingredients?.length) {
-        values.ingredients.forEach((ingredient) => {
-          this.ingredients.push(this.fb.control(ingredient));
-        });
+      // Handle initial ingredients
+      if (this.initialValues.ingredients?.length) {
+        this.initialValues.ingredients.forEach((ingredient) =>
+          this.ingredients.push(
+            this.fb.control(ingredient, Validators.required)
+          )
+        );
       }
     }
   }
 
   addIngredient(event?: Event): void {
     event?.preventDefault();
-
     if (this.ingredientFormCtrl.valid) {
       this.ingredients.push(
         this.fb.control(this.ingredientFormCtrl.value, {
@@ -104,10 +123,15 @@ export class RecipeFormComponent implements OnInit {
   }
 
   submitForm(): void {
-    this.isSubmitting.set(true);
     if (this.form.valid) {
       this.submitEvent.emit(this.form.getRawValue() as RecipeForm);
+    } else {
+      // Mark all fields as touched to display errors
+      Object.values(this.form.controls).forEach((control) => {
+        if (control instanceof FormControl) {
+          control.markAsTouched();
+        }
+      });
     }
-    this.isSubmitting.set(false);
   }
 }

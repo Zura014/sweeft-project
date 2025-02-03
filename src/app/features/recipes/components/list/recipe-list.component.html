@@ -14,6 +14,7 @@
           [formControl]="searchControl"
           (keydown.enter)="$event.preventDefault()"
           placeholder="Enter recipe name or description"
+          aria-label="Search for recipes by name or description"
         />
       </mat-form-field>
 
@@ -22,7 +23,7 @@
         (change)="handleFilterChange($event)"
         name="filterRecipes"
         aria-label="Filter Recipes"
-        [value]="recipeFilter()"
+        [value]="filterSubject.value"
       >
         <mat-button-toggle value="all">All</mat-button-toggle>
         <mat-button-toggle value="favorited">Favorited</mat-button-toggle>

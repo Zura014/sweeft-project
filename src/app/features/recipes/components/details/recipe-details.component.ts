@@ -12,9 +12,9 @@ import { RecipeI } from '../../interfaces/recipe.interface';
 import {
   catchError,
   EMPTY,
+  filter,
   map,
   Observable,
-  of,
   Subject,
   switchMap,
   take,
@@ -47,7 +47,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   toastr = inject(ToastrService);
   fb = inject(FormBuilder);
 
-  recipe$!: Observable<RecipeI>;
+  currentRecipe$!: Observable<RecipeI>;
 
   initialValues: RecipeForm = {
     title: '',
@@ -59,14 +59,24 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   };
 
   isEditing = signal(false);
-  isLoading = signal(true);
+  isLoading = signal(false);
 
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.recipe$ = this.route.data.pipe(
+    this.initRecipe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  initRecipe(): void {
+    this.isLoading.set(true);
+    this.currentRecipe$ = this.recipeService.currentRecipe$.pipe(
       takeUntil(this.destroy$),
-      map((data) => data['recipe']),
+      filter((res) => res !== null),
       tap((recipe) => {
         this.initialValues = {
           title: recipe.title,
@@ -81,24 +91,32 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   onSubmit(form: RecipeForm): void {
     this.isLoading.set(true);
     this.route.params
       .pipe(
         take(1),
         map((params) => params['id']),
+        catchError((err) => {
+          this.router.navigate(['/']);
+          this.onError(err);
+          return EMPTY;
+        }),
         switchMap((id) =>
           this.recipeService.updateRecipe(id, form).pipe(
-            catchError(() => {
-              this.onError;
+            catchError((err) => {
+              this.onError(err);
               return EMPTY;
             }),
-            tap()
+            tap(() => {
+              this.toastr.success('Recipe updated successfully!', '', {
+                timeOut: 5000,
+                positionClass: 'toast-bottom-right',
+              });
+              this.isLoading.set(false);
+              // Update initialValues here with the new form data
+              this.initialValues = { ...form };
+            })
           )
         )
       )
@@ -107,8 +125,10 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
   deleteRecipe(id: string): void {
     if (confirm('Are you sure you want to delete this recipe?')) {
+      this.isLoading.set(true);
       this.recipeService.deleteRecipe(id).subscribe({
         next: () => {
+          this.isLoading.set(false);
           this.toastr.success('Recipe deleted successfully!', '', {
             timeOut: 5000,
             positionClass: 'toast-bottom-right',
@@ -117,13 +137,14 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.onError(err);
+          this.isLoading.set(false);
         },
       });
     }
   }
 
   toggleFavorite(id: string, isFavorite: boolean): void {
-    this.recipe$ = this.recipe$.pipe(
+    this.currentRecipe$ = this.currentRecipe$.pipe(
       map((recipe) => ({ ...recipe, isFavorite: !isFavorite }))
     );
 
@@ -154,7 +175,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   onError(error: HttpErrorResponse): void {
     this.toastr.error('Something went wrong!', error.error.message, {
       timeOut: 5000,
-      positionClass: 'toasto-bottom-right',
+      positionClass: 'toast-bottom-right',
     });
     this.router.navigate(['/home']);
   }
