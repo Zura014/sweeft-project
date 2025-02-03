@@ -3,7 +3,7 @@
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
-  <mat-card class="w-full max-w-lg h-full">
+  <mat-card class="w-full max-w-sm h-full">
     <mat-card-content class="space-y-3">
       <!-- Title Input Field -->
       <mat-form-field class="w-full">
@@ -67,52 +67,34 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Ingredients -->
-      <div formArrayName="ingredients">
-        <mat-form-field class="w-full">
-          <mat-label>Ingredients</mat-label>
-          <input
-            matInput
-            type="text"
-            id="ingredients"
-            [formControl]="ingredientFormCtrl"
-            placeholder="Ingredients"
-            aria-label="Add Ingredient"
-            (keydown.enter)="$event.preventDefault(); addIngredient()"
-          />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="addIngredient()"
+      <mat-form-field class="w-full">
+        <mat-label>Ingredients</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Enter ingredients">
+          @for (ingredient of ingredients.controls; track ingredient.value) {
+          <mat-chip-row
+            (removed)="removeIngredient(ingredient.value)"
+            [editable]="true"
+            (edited)="editIngredient(ingredient.value, $event)"
+            [aria-description]="'press enter to edit ' + ingredient.value"
           >
-            <mat-icon>add</mat-icon>
-          </button>
-          <mat-error
-            *ngIf="form.get('ingredients')?.hasError('required')"
-            id="ingredients-required"
-          >
-            At least one ingredient is required
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Display Ingredients as Chips -->
-        <mat-chip-set aria-label="ingredient-tags">
-          @for (ingredient of ingredients.controls; track ingredient.value +
-          $index) {
-          <mat-chip>
             {{ ingredient.value }}
             <button
-              mat-icon-button
               matChipRemove
-              (click)="removeIngredient($index)"
+              [attr.aria-label]="'remove ' + ingredient.value"
             >
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           }
-        </mat-chip-set>
-      </div>
+          <input
+            placeholder="New ingredient..."
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addIngredient($event)"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
 
       <!-- Instructions Textarea -->
       <mat-form-field class="w-full">
@@ -142,7 +124,7 @@
         class="flex sm:flex-row flex-col justify-between gap-x-4 items-center"
       >
         <!-- Image URL Input -->
-        <mat-form-field class="w-full sm:w-1/2 md:w-3/4 h-fit">
+        <mat-form-field class="w-3/4 h-fit">
           <mat-label>Image URL</mat-label>
           <input
             matInput
@@ -169,7 +151,7 @@
         <img
           [src]="form.get('imageUrl')?.value || null"
           *ngIf="form.get('imageUrl')?.value"
-          class="w-full sm:w-1/2 md:w-1/4 rounded"
+          class="w-1/4 rounded"
           alt="Recipe Image Preview"
         />
       </div>

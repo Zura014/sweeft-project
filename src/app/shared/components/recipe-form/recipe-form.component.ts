@@ -19,11 +19,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule } from '@angular/material/chips';
+import {
+  MatChipEditedEvent,
+  MatChipInputEvent,
+  MatChipsModule,
+} from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { computed } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-recipe-form',
@@ -47,8 +52,8 @@ export class RecipeFormComponent implements OnInit {
   @Output() submitEvent = new EventEmitter<RecipeForm>();
   @Output() error = new EventEmitter<HttpErrorResponse>();
 
-  // Control for adding new ingredients
-  ingredientFormCtrl = new FormControl('', [Validators.required]);
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  addOnBlur = true;
 
   // Main form group
   form = this.fb.nonNullable.group({
@@ -101,36 +106,42 @@ export class RecipeFormComponent implements OnInit {
             this.fb.control(ingredient, Validators.required)
           )
         );
-        this.ingredientFormCtrl.clearValidators();
-      } else {
-        this.ingredientFormCtrl.addValidators([Validators.required]);
       }
     }
   }
 
-  addIngredient(event?: Event): void {
-    event?.preventDefault();
-    if (this.ingredientFormCtrl.valid) {
-      this.ingredients.push(
-        this.fb.control(this.ingredientFormCtrl.value, {
-          validators: [Validators.required],
-          nonNullable: true,
-        })
-      );
-      this.ingredientFormCtrl.setValidators([]);
-      this.ingredientFormCtrl.reset();
+  addIngredient(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.ingredients.push(this.fb.control(value, Validators.required));
+    }
+    if (event.input) {
+      event.input.value = '';
     }
   }
 
-  removeIngredient(index: number): void {
-    this.ingredients.removeAt(index);
+  removeIngredient(ingredient: string): void {
+    const index = this.ingredients.controls.findIndex(
+      (control) => control.value === ingredient
+    );
+    if (index >= 0) {
+      this.ingredients.removeAt(index);
+    }
+  }
+
+  editIngredient(ingredient: string, event: MatChipEditedEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      const index = this.ingredients.controls.findIndex(
+        (control) => control.value === ingredient
+      );
+      if (index >= 0) {
+        this.ingredients.at(index).setValue(value);
+      }
+    }
   }
 
   submitForm(): void {
-    if (this.ingredientFormCtrl.valid) {
-      this.addIngredient();
-    }
-
     if (this.ingredients.value.length && this.form.valid) {
       this.submitEvent.emit(this.form.getRawValue() as RecipeForm);
     } else {
