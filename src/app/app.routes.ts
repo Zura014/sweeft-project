@@ -24,7 +24,11 @@ export const routes: Routes = [
   {
     title: 'Recipes - Details',
     path: 'details/:id',
-    component: RecipeDetailsComponent,
+    // component: RecipeDetailsComponent,
+    loadComponent: () =>
+      import(
+        './features/recipes/components/details/recipe-details.component'
+      ).then((c) => c.RecipeDetailsComponent),
     resolve: { recipeResolver },
   },
   {

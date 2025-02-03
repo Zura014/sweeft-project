@@ -5,6 +5,7 @@ import { RecipeI } from '../interfaces/recipe.interface';
 import { UpdateRecipeI } from '../interfaces/update-recipe.interface';
 import { CreateRecipeI } from '../interfaces/create-recipe.interface';
 import { RecipeFilterType } from '../types/recipe-filter.type';
+import { environment } from '../../../../environments/environment';
 
 /**
  * Service responsible for handling all recipe-related HTTP operations
@@ -16,7 +17,7 @@ import { RecipeFilterType } from '../types/recipe-filter.type';
 })
 export class RecipeService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/recipes';
+  private readonly apiUrl = environment.apiUrl + '/recipes';
 
   // BehaviorSubject to maintain and broadcast recipe state changes
   private readonly recipesSubject = new BehaviorSubject<RecipeI[]>([]);
