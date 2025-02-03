@@ -7,16 +7,22 @@
     >
       <!-- Search input field -->
       <mat-form-field class="w-full sm:w-1/2 md:w-2/3 pt-4">
-        <mat-label>Search Recipes</mat-label>
+        <mat-label>Search...</mat-label>
         <input
           type="text"
           matInput
           [formControl]="searchControl"
           (keydown.enter)="$event.preventDefault()"
-          placeholder="Enter recipe name or description"
+          placeholder="Enter name or description..."
           aria-label="Search for recipes by name or description"
         />
       </mat-form-field>
+
+      @if(queryIsLoading()){
+      <div class="size-10 flex items-center justify-center">
+        <mat-spinner class="sm:m-0 mb-6"></mat-spinner>
+      </div>
+      }
 
       <!-- Filter buttons for sorting recipes -->
       <mat-button-toggle-group

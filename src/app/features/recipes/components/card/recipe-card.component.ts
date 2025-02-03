@@ -6,13 +6,15 @@ import {
 } from '@angular/core';
 import { RecipeI } from '../../interfaces/recipe.interface';
 import { RouterLink } from '@angular/router';
-import { MatButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [RouterLink, MatButton],
+  imports: [RouterLink, MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './recipe-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,6 +52,11 @@ export class RecipeCardComponent {
             );
           },
           error: (err) => {
+            this.toastr.error('Something went wrong!', '', {
+              timeOut: 3000,
+              closeButton: true,
+              positionClass: 'toast-bottom-right',
+            });
             console.error(err);
           },
         });

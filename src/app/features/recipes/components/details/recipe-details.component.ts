@@ -28,12 +28,14 @@ import { RecipeFormComponent } from '../../../../shared/components/recipe-form/r
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-recipe-details',
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatButton,
     RecipeFormComponent,
     LoadingComponent,
   ],

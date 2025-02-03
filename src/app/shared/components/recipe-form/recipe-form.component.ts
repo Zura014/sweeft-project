@@ -114,6 +114,7 @@ export class RecipeFormComponent implements OnInit {
           nonNullable: true,
         })
       );
+      this.ingredientFormCtrl.setValidators([]);
       this.ingredientFormCtrl.reset();
     }
   }
@@ -123,7 +124,11 @@ export class RecipeFormComponent implements OnInit {
   }
 
   submitForm(): void {
-    if (this.form.valid) {
+    if (this.ingredientFormCtrl.valid) {
+      this.addIngredient();
+    }
+
+    if (this.ingredients.value.length && this.form.valid) {
       this.submitEvent.emit(this.form.getRawValue() as RecipeForm);
     } else {
       // Mark all fields as touched to display errors

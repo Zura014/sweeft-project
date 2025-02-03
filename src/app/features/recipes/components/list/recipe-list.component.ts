@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { RecipeCardComponent } from '../card/recipe-card.component';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   BehaviorSubject,
   catchError,
@@ -21,7 +21,6 @@ import {
   debounceTime,
   distinctUntilChanged,
   EMPTY,
-  map,
   Observable,
   startWith,
   Subject,
@@ -34,6 +33,7 @@ import {
   MatButtonToggleModule,
 } from '@angular/material/button-toggle';
 import { RecipeFilterType } from '../../types/recipe-filter.type';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-recipe-list',
@@ -48,6 +48,7 @@ import { RecipeFilterType } from '../../types/recipe-filter.type';
     RecipeCardComponent,
     ReactiveFormsModule,
     LoadingComponent,
+    MatProgressSpinner,
   ],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
@@ -64,6 +65,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   // Signals for reactive state management
   protected readonly isLoading = signal(true);
+  protected readonly queryIsLoading = signal(true);
   protected readonly searchControl = new FormControl<string>('');
 
   // Observable for the list of recipes
@@ -82,10 +84,13 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     const search$ = this.searchControl.valueChanges.pipe(
       startWith(''), // Start with an empty query to fetch all recipes initially
       debounceTime(300), // Wait for 300ms before processing the latest value
-      distinctUntilChanged() // Only emit if the search term has changed
+      distinctUntilChanged(), // Only emit if the search term has changed
+      tap(() => this.queryIsLoading.set(true))
     );
 
-    const filter$ = this.filterSubject.asObservable();
+    const filter$ = this.filterSubject
+      .asObservable()
+      .pipe(tap(() => this.queryIsLoading.set(true)));
 
     this.isLoading.set(true);
 
@@ -94,22 +99,15 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       switchMap(([query, filter]) =>
         this.recipeService.getAllRecipes(query ?? undefined, filter).pipe(
           catchError((err) => {
-            /**
-             * I would also handle an error here if the error was dynamic,
-             * but it can only occur when the JSON server is down and can't
-             * fetch recipes, so the error message is hard-coded in the template.
-             * If it were dynamic, I would create a function to handle it:
-             * - Import and use an AlertComponent, which I would create specifically for this purpose.
-             * - Declare an `errorMessage` signal to track errors.
-             * - Assign the error to this signal and use it via data binding.
-             * - The AlertComponent would be a 'dumb' component, meaning it relies on data being passed to it
-             *   through the `@Input` decorator.
-             */
             console.error(err);
+            this.queryIsLoading.set(false);
             this.isLoading.set(false);
             return EMPTY;
           }),
-          tap(() => this.isLoading.set(false)) // handling loading state.
+          tap(() => {
+            this.queryIsLoading.set(false);
+            this.isLoading.set(false);
+          }) // handling loading state.
         )
       )
     );
