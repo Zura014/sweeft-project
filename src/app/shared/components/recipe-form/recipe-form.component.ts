@@ -101,6 +101,9 @@ export class RecipeFormComponent implements OnInit {
             this.fb.control(ingredient, Validators.required)
           )
         );
+        this.ingredientFormCtrl.clearValidators();
+      } else {
+        this.ingredientFormCtrl.addValidators([Validators.required]);
       }
     }
   }
