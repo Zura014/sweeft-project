@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "frontend": "ng serve",
-    "backend": "json-server --watch db.json --port 3000",
+    "backend": "node server.js",
     "start": "concurrently \"npm run frontend\" \"npm run backend\"",
     "build": "concurrently \"ng build\" \"npm run backend\"",
     "watch": "ng build --watch --configuration development",

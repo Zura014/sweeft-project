@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { HomeComponent } from './features/home/home.component';
-import { RecipeDetailsComponent } from './features/recipes/components/details/recipe-details.component';
-import { RecipeSubmissionComponent } from './features/recipes/components/submission/recipe-submission.component';
 import { recipeResolver } from './features/recipes/resolvers/recipe.resolver';
 
 export const routes: Routes = [
@@ -14,17 +11,20 @@ export const routes: Routes = [
   {
     title: 'Recipes - Home',
     path: 'home',
-    component: HomeComponent,
+    loadComponent: () =>
+      import('./features/home/home.component').then((c) => c.HomeComponent),
   },
   {
     title: 'Recipes - Create',
     path: 'submission',
-    component: RecipeSubmissionComponent,
+    loadComponent: () =>
+      import(
+        './features/recipes/components/submission/recipe-submission.component'
+      ).then((c) => c.RecipeSubmissionComponent),
   },
   {
     title: 'Recipes - Details',
     path: 'details/:id',
-    // component: RecipeDetailsComponent,
     loadComponent: () =>
       import(
         './features/recipes/components/details/recipe-details.component'
