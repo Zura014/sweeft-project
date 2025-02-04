@@ -138,9 +138,6 @@ export class RecipeFormComponent implements OnInit {
         ...formValue,
         ingredients: this.ingredients(),
       } as RecipeForm);
-      if (!this.initialValues) {
-        this.form.reset();
-      }
     } else {
       // Mark all fields as touched to display errors
       this.form.markAllAsTouched();
