@@ -23,8 +23,8 @@ import {
 } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RecipeForm } from '../../../../shared/components/recipe-form/types/recipe-form.type';
-import { RecipeFormComponent } from '../../../../shared/components/recipe-form/recipe-form.component';
+import { RecipeForm } from '../../types/recipe-form.type';
+import { RecipeFormComponent } from '../form/recipe-form.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';

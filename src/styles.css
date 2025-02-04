@@ -1,5 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* 
+    Due to a conflict with the style in 
+    TailwindCSS and the angular material,
+    input from angular material with 
+    appearance "outline" doesn't display properly
+ */
+.mdc-notched-outline__notch {
+  border-right: none;
+}
