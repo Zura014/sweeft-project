@@ -33,7 +33,7 @@ import {
   MatButtonToggleModule,
 } from '@angular/material/button-toggle';
 import { RecipeFilterType } from '../../types/recipe-filter.type';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-recipe-list',
@@ -48,7 +48,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     RecipeCardComponent,
     ReactiveFormsModule,
     LoadingComponent,
-    MatProgressSpinner,
+    MatProgressBar,
   ],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
@@ -65,7 +65,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   // Signals for reactive state management
   protected readonly isLoading = signal(true);
-  protected readonly queryIsLoading = signal(true);
   protected readonly searchControl = new FormControl<string>('');
 
   // Observable for the list of recipes
@@ -85,12 +84,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       startWith(''), // Start with an empty query to fetch all recipes initially
       debounceTime(300), // Wait for 300ms before processing the latest value
       distinctUntilChanged(), // Only emit if the search term has changed
-      tap(() => this.queryIsLoading.set(true))
+      tap(() => this.isLoading.set(true))
     );
 
     const filter$ = this.filterSubject
       .asObservable()
-      .pipe(tap(() => this.queryIsLoading.set(true)));
+      .pipe(tap(() => this.isLoading.set(true)));
 
     this.isLoading.set(true);
 
@@ -98,14 +97,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$), // Unsubscribe when component is destroyed
       switchMap(([query, filter]) =>
         this.recipeService.getAllRecipes(query ?? undefined, filter).pipe(
-          catchError((err) => {
-            console.error(err);
-            this.queryIsLoading.set(false);
+          catchError(() => {
             this.isLoading.set(false);
             return EMPTY;
           }),
           tap(() => {
-            this.queryIsLoading.set(false);
             this.isLoading.set(false);
           }) // handling loading state.
         )

@@ -25,8 +25,6 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RecipeForm } from '../../types/recipe-form.type';
 import { RecipeFormComponent } from '../form/recipe-form.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { MatButton } from '@angular/material/button';
 
@@ -46,7 +44,6 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   router = inject(Router);
   recipeService = inject(RecipeService);
-  toastr = inject(ToastrService);
   fb = inject(FormBuilder);
 
   currentRecipe$!: Observable<RecipeI>;
@@ -99,22 +96,14 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         map((params) => params['id']),
-        catchError((err) => {
+        catchError(() => {
+          this.isLoading.set(false);
           this.router.navigate(['/']);
-          this.onError(err);
           return EMPTY;
         }),
         switchMap((id) =>
           this.recipeService.updateRecipe(id, form).pipe(
-            catchError((err) => {
-              this.onError(err);
-              return EMPTY;
-            }),
             tap(() => {
-              this.toastr.success('Recipe updated successfully!', '', {
-                timeOut: 5000,
-                positionClass: 'toast-bottom-right',
-              });
               this.isLoading.set(false);
               // Update initialValues here with the new form data
               this.initialValues = { ...form };
@@ -131,14 +120,9 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
       this.recipeService.deleteRecipe(id).subscribe({
         next: () => {
           this.isLoading.set(false);
-          this.toastr.success('Recipe deleted successfully!', '', {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-right',
-          });
           this.router.navigateByUrl('/home');
         },
-        error: (err) => {
-          this.onError(err);
+        error: () => {
           this.isLoading.set(false);
         },
       });
@@ -146,39 +130,18 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   }
 
   toggleFavorite(id: string, isFavorite: boolean): void {
+    this.isLoading.set(true);
+
     this.currentRecipe$ = this.currentRecipe$.pipe(
       map((recipe) => ({ ...recipe, isFavorite: !isFavorite }))
     );
 
-    this.recipeService.toggleFavorite(id, !isFavorite).subscribe({
-      next: () => {
-        this.toastr.success(
-          !isFavorite
-            ? 'Recipe favorited successfully!'
-            : 'Recipe unfavorited Successfully',
-          '',
-          {
-            timeOut: 3000,
-            closeButton: true,
-            positionClass: 'toast-bottom-right',
-          }
-        );
-      },
-      error: (err) => {
-        this.onError(err);
-      },
-    });
+    this.recipeService
+      .toggleFavorite(id, !isFavorite)
+      .subscribe(() => this.isLoading.set(false));
   }
 
   toggleEdit(): void {
     this.isEditing.update((val) => !val);
-  }
-
-  onError(error: HttpErrorResponse): void {
-    this.toastr.error('Something went wrong!', error.error.message, {
-      timeOut: 5000,
-      positionClass: 'toast-bottom-right',
-    });
-    this.router.navigate(['/home']);
   }
 }

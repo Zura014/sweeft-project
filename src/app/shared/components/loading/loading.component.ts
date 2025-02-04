@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-loading',
   template: `
-    <div class="flex flex-col w-full gap-y-2 mt-24 justify-center items-center">
+    <div class="flex flex-col w-full gap-y-2 justify-center items-center">
       <h1 class="text-xl font-medium">LOADING</h1>
       <span class="loader"><span class="loader-inner"></span></span>
     </div>

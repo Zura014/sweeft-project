@@ -24,9 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { computed } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
@@ -46,7 +44,8 @@ export class RecipeFormComponent implements OnInit {
   private liveAnnouncer = inject(LiveAnnouncer); // Accessibility support
 
   /*
-   * I would've used signals instead of decorators, but task description suggested using decorators.
+   * I would've used signals instead of decorators,
+   * but task description suggested using decorators.
    */
   @Input() initialValues?: RecipeForm; // Optional values to populate form with initial vaulues.
   @Output() submitEvent = new EventEmitter<RecipeForm>(); // emits the form data when submitted.
@@ -79,9 +78,7 @@ export class RecipeFormComponent implements OnInit {
     }),
   });
 
-  readonly ingredients = signal<string[]>([]);
-
-  private isFormDirty = computed(() => this.form.dirty);
+  readonly ingredients = signal<string[]>([]); // Signal-based reactive state for ingredients list
 
   ngOnInit(): void {
     if (this.initialValues) {
@@ -101,17 +98,25 @@ export class RecipeFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Adds an ingredient to the list when a user inputs it via a chip input.
+   * @param event - The event emitted when an ingredient chip is added.
+   */
   addIngredient(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {
       this.ingredients.update((ingredients) => [...ingredients, value]);
-      this.liveAnnouncer.announce(`Added ${value} to ingredients`);
+      this.liveAnnouncer.announce(`Added ${value} to ingredients`); // Accessibility announcement
     }
     if (event.chipInput) {
       event.chipInput.clear();
     }
   }
 
+  /**
+   * Removes an ingredient from the list.
+   * @param ingredient - The ingredient to remove.
+   */
   removeIngredient(ingredient: string): void {
     this.ingredients.update((ingredients) => {
       const index = ingredients.indexOf(ingredient);
@@ -123,6 +128,9 @@ export class RecipeFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Submits the form data if valid, otherwise marks all fields as touched to show validation errors.
+   */
   submitForm(): void {
     if (this.form.valid) {
       const formValue = this.form.getRawValue();
@@ -130,6 +138,9 @@ export class RecipeFormComponent implements OnInit {
         ...formValue,
         ingredients: this.ingredients(),
       } as RecipeForm);
+      if (this.initialValues) {
+        this.form.reset();
+      }
     } else {
       // Mark all fields as touched to display errors
       this.form.markAllAsTouched();

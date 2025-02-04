@@ -1,11 +1,19 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpParams,
+} from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  tap,
+} from 'rxjs';
 import { RecipeI } from '../interfaces/recipe.interface';
 import { UpdateRecipeI } from '../interfaces/update-recipe.interface';
 import { CreateRecipeI } from '../interfaces/create-recipe.interface';
 import { RecipeFilterType } from '../types/recipe-filter.type';
 import { environment } from '../../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 /**
  * Service responsible for handling all recipe-related HTTP operations
@@ -17,6 +25,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class RecipeService {
   private readonly http = inject(HttpClient);
+  private readonly toastr = inject(ToastrService);
   private readonly apiUrl = environment.apiUrl + '/recipes';
 
   // BehaviorSubject to maintain and broadcast recipe state changes
@@ -74,6 +83,13 @@ export class RecipeService {
       tap((createdRecipe) => {
         const currentRecipes = this.recipesSubject.value;
         this.recipesSubject.next([...currentRecipes, createdRecipe]);
+
+        this.toastr.success('Recipe created successfully!', '', {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-right',
+          progressBar: true,
+          messageClass: 'ease-in',
+        });
       })
     );
   }
@@ -91,12 +107,19 @@ export class RecipeService {
     return this.http.patch<RecipeI>(`${this.apiUrl}/${id}`, updatedRecipe).pipe(
       tap((updatedRecipeResponse) => {
         const currentRecipes = this.recipesSubject.value;
-        const updatedRecipes = [
-          ...currentRecipes.filter((recipe) => recipe.id !== id),
-          updatedRecipeResponse,
-        ];
+        const updatedRecipes = currentRecipes.map((recipe) =>
+          recipe.id !== id ? { ...recipe, ...updatedRecipeResponse } : recipe
+        );
+
         this.currentRecipeSubject.next(updatedRecipeResponse);
         this.recipesSubject.next(updatedRecipes);
+
+        this.toastr.success('Recipe updated successfully!', '', {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-right',
+          progressBar: true,
+          messageClass: 'ease-in',
+        });
       })
     );
   }
@@ -115,11 +138,24 @@ export class RecipeService {
       .pipe(
         tap((updatedRecipeResponse) => {
           const currentRecipes = this.recipesSubject.value;
-          const updatedRecipes = [
-            ...currentRecipes.filter((recipe) => recipe.id !== id),
-            updatedRecipeResponse,
-          ];
+          const updatedRecipes = currentRecipes.map((recipe) =>
+            recipe.id !== id ? { ...recipe, ...updatedRecipeResponse } : recipe
+          );
+
           this.recipesSubject.next(updatedRecipes);
+
+          this.toastr.success(
+            isFavorite
+              ? 'Recipe favorited successfully!'
+              : 'Recipe unfavorited successfully',
+            '',
+            {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-right',
+              progressBar: true,
+              messageClass: 'ease-in',
+            }
+          );
         })
       );
   }
@@ -137,6 +173,12 @@ export class RecipeService {
         );
         this.recipesSubject.next(filteredRecipes);
         this.currentRecipeSubject.next(null);
+
+        this.toastr.success('Recipe deleted successfully!', '', {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-right',
+          progressBar: true,
+        });
       })
     );
   }

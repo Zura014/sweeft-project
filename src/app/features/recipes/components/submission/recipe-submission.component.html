@@ -3,6 +3,9 @@
     <h1 class="text-4xl pb-4 border-b border-b-borderC">Recipe Submission</h1>
   </header>
   <section>
+    <div class="mt-12">
+      <app-loading *ngIf="isLoading()"></app-loading>
+    </div>
     <app-recipe-form (submitEvent)="onSubmit($event)"></app-recipe-form>
   </section>
 </div>

@@ -21,12 +21,6 @@
         />
       </mat-form-field>
 
-      @if(!isLoading() && queryIsLoading()){
-      <div class="size-10 flex items-center justify-center">
-        <mat-spinner class="sm:m-0 mb-6"></mat-spinner>
-      </div>
-      }
-
       <!-- Filter buttons for sorting recipes -->
       <mat-button-toggle-group
         (change)="handleFilterChange($event)"
@@ -44,7 +38,19 @@
   </header>
 
   <!-- Main content area for displaying recipes -->
-  <main class="py-4" *ngIf="recipes$ | async as recipes; else loadingOrError">
+  <main
+    class="relative py-4"
+    *ngIf="recipes$ | async as recipes; else loadingOrError"
+  >
+    <!-- Showing feedback when user selects a query (search or filter) -->
+    <!-- Wrapper for styling -->
+    <div class="absolute top-0 left-0 w-full h-fit">
+      <mat-progress-bar
+        *ngIf="isLoading()"
+        mode="indeterminate"
+      ></mat-progress-bar>
+    </div>
+
     <!-- Grid layout for recipe cards -->
     <div
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
@@ -67,13 +73,15 @@
 
 <!-- Template for handling loading state or errors -->
 <ng-template #loadingOrError>
-  @if(isLoading()) {
-  <!-- Display loading component while fetching data -->
-  <app-loading></app-loading>
-  } @else {
-  <!-- Display error message if data loading fails -->
-  <p class="text-gray-500 text-center mt-4">
-    Unable to load recipes. Please try again later.
-  </p>
-  }
+  <div class="py-4">
+    @if(isLoading()) {
+    <!-- Display loading component while fetching data -->
+    <app-loading></app-loading>
+    } @else {
+    <!-- Display error message if data loading fails -->
+    <p class="text-gray-500 text-center mt-4">
+      Unable to load recipes. Please try again later.
+    </p>
+    }
+  </div>
 </ng-template>
