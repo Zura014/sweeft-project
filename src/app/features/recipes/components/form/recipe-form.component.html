@@ -1,3 +1,4 @@
+<!-- Shared form component for pages where modification is needed -->
 <form
   class="flex justify-center w-full py-12 items-center"
   [formGroup]="form"
@@ -18,22 +19,13 @@
           placeholder="Title"
           aria-label="Recipe Title"
         />
-        <mat-error
-          *ngIf="form.get('title')?.hasError('required')"
-          id="title-required"
-        >
+        <mat-error *ngIf="form.get('title')?.hasError('required')">
           Title is required
         </mat-error>
-        <mat-error
-          *ngIf="form.get('title')?.hasError('minlength')"
-          id="title-minlength"
-        >
+        <mat-error *ngIf="form.get('title')?.hasError('minlength')">
           Title must be at least 3 characters long
         </mat-error>
-        <mat-error
-          *ngIf="form.get('title')?.hasError('maxlength')"
-          id="title-maxlength"
-        >
+        <mat-error *ngIf="form.get('title')?.hasError('maxlength')">
           Title cannot exceed 50 characters
         </mat-error>
       </mat-form-field>
@@ -49,22 +41,13 @@
           placeholder="Description"
           aria-label="Recipe Description"
         />
-        <mat-error
-          *ngIf="form.get('description')?.hasError('required')"
-          id="description-required"
-        >
+        <mat-error *ngIf="form.get('description')?.hasError('required')">
           Description is required
         </mat-error>
-        <mat-error
-          *ngIf="form.get('description')?.hasError('minlength')"
-          id="description-minlength"
-        >
+        <mat-error *ngIf="form.get('description')?.hasError('minlength')">
           Description must be at least 10 characters long
         </mat-error>
-        <mat-error
-          *ngIf="form.get('description')?.hasError('maxlength')"
-          id="description-maxlength"
-        >
+        <mat-error *ngIf="form.get('description')?.hasError('maxlength')">
           Description cannot exceed 500 characters
         </mat-error>
       </mat-form-field>
@@ -79,10 +62,7 @@
           @for (ingredient of ingredients(); track ingredient) {
           <mat-chip-row (removed)="removeIngredient(ingredient)">
             {{ ingredient }}
-            <button
-              matChipRemove
-              aria-label="'remove reactive form' + ingredient"
-            >
+            <button matChipRemove aria-label="remove ingredient">
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>
@@ -93,10 +73,7 @@
           [matChipInputFor]="reactiveChipGrid"
           (matChipInputTokenEnd)="addIngredient($event)"
         />
-        <mat-error
-          *ngIf="form.get('ingredients')?.hasError('required')"
-          id="ingredients-required"
-        >
+        <mat-error *ngIf="form.get('ingredients')?.hasError('required')">
           Ingredients are required
         </mat-error>
       </mat-form-field>
@@ -111,50 +88,41 @@
           placeholder="Instructions"
           aria-label="Recipe Instructions"
         ></textarea>
-        <mat-error
-          *ngIf="form.get('instructions')?.hasError('required')"
-          id="instructions-required"
-        >
+        <mat-error *ngIf="form.get('instructions')?.hasError('required')">
           Instructions are required
         </mat-error>
-        <mat-error
-          *ngIf="form.get('instructions')?.hasError('minlength')"
-          id="instructions-minlength"
-        >
+        <mat-error *ngIf="form.get('instructions')?.hasError('minlength')">
           Instructions must be at least 20 characters long
         </mat-error>
       </mat-form-field>
 
-      <div class="flex flex-row justify-between gap-x-4 items-start">
+      <div class="flex flex-row justify-between gap-x-4 items-center">
         <!-- Image URL Input -->
-        <mat-form-field appearance="outline" class="w-full h-fit">
+        <mat-form-field appearance="outline" class="w-full pt-5 h-fit">
           <mat-label>Image URL</mat-label>
           <input
             matInput
-            type="text"
+            type="url"
             id="imageUrl"
             formControlName="imageUrl"
             placeholder="Image URL"
             aria-label="Image URL"
           />
-          <mat-error
-            *ngIf="form.get('imageUrl')?.hasError('required')"
-            id="imageUrl-required"
-          >
+          <mat-error *ngIf="form.get('imageUrl')?.hasError('required')">
             Image URL is required
           </mat-error>
-          <mat-error
-            *ngIf="form.get('imageUrl')?.hasError('pattern')"
-            id="imageUrl-pattern"
-          >
-            Please enter a valid image URL (e.g., http://example.com/image.jpg)
+          <mat-error *ngIf="form.get('imageUrl')?.hasError('pattern')">
+            Please enter a valid URL
           </mat-error>
         </mat-form-field>
         <!-- Image Preview -->
         <img
-          [src]="form.get('imageUrl')?.value || null"
-          *ngIf="form.get('imageUrl')?.value"
-          class="w-1/4 rounded"
+          [src]="
+            form.get('imageUrl')?.dirty && form.get('imageUrl')?.value
+              ? form.get('imageUrl')?.value
+              : '/images/image-placeholder.png'
+          "
+          class="size-32 rounded border border-borderC"
           alt="Recipe Image Preview"
         />
       </div>

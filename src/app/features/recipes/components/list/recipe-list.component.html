@@ -6,7 +6,10 @@
       class="flex items-center justify-between flex-col sm:flex-row gap-x-6 border-b py-2 border-b-borderC w-full"
     >
       <!-- Search input field -->
-      <mat-form-field appearance="outline" class="w-full sm:w-1/2 md:w-2/3 pt-4">
+      <mat-form-field
+        appearance="outline"
+        class="w-full sm:w-1/2 md:w-2/3 pt-4"
+      >
         <mat-label>Search...</mat-label>
         <input
           type="text"
@@ -18,7 +21,7 @@
         />
       </mat-form-field>
 
-      @if(queryIsLoading()){
+      @if(!isLoading() && queryIsLoading()){
       <div class="size-10 flex items-center justify-center">
         <mat-spinner class="sm:m-0 mb-6"></mat-spinner>
       </div>

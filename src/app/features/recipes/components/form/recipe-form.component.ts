@@ -25,7 +25,6 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { computed } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
@@ -44,11 +43,13 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
   ],
 })
 export class RecipeFormComponent implements OnInit {
-  private liveAnnouncer = inject(LiveAnnouncer);
+  private liveAnnouncer = inject(LiveAnnouncer); // Accessibility support
 
-  @Input() initialValues?: RecipeForm;
-  @Output() submitEvent = new EventEmitter<RecipeForm>();
-  @Output() error = new EventEmitter<HttpErrorResponse>();
+  /*
+   * I would've used signals instead of decorators, but task description suggested using decorators.
+   */
+  @Input() initialValues?: RecipeForm; // Optional values to populate form with initial vaulues.
+  @Output() submitEvent = new EventEmitter<RecipeForm>(); // emits the form data when submitted.
 
   // Main form group
   form: RecipeFormGroup = new FormGroup<RecipeFormControls>({
@@ -81,9 +82,6 @@ export class RecipeFormComponent implements OnInit {
   readonly ingredients = signal<string[]>([]);
 
   private isFormDirty = computed(() => this.form.dirty);
-
-  // Computed property to check if form has errors
-  hasError = computed(() => this.form.touched && !this.form.valid);
 
   ngOnInit(): void {
     if (this.initialValues) {
