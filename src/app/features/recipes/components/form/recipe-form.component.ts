@@ -138,7 +138,7 @@ export class RecipeFormComponent implements OnInit {
         ...formValue,
         ingredients: this.ingredients(),
       } as RecipeForm);
-      if (this.initialValues) {
+      if (!this.initialValues) {
         this.form.reset();
       }
     } else {
