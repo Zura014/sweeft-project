@@ -124,7 +124,7 @@ export class RecipeService {
   /**
    * Adds/Removes recipe as favorite
    * @param id - Recipe identifier
-   * @param isFavorited - Updated favorite state
+   * @param isFavorite - Updated favorite state
    * @returns Observable of updated RecipeI
    */
   public toggleFavorite(id: string, isFavorite: boolean): Observable<RecipeI> {
