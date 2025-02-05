@@ -1,6 +1,6 @@
 <!-- Shared form component for pages where modification is needed -->
 <form
-  class="flex justify-center w-full py-12 items-center"
+  class="flex justify-center w-full py-6 items-center"
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
@@ -111,18 +111,16 @@
           <mat-error *ngIf="form.get('imageUrl')?.hasError('required')">
             Image URL is required
           </mat-error>
-          <mat-error *ngIf="form.get('imageUrl')?.hasError('pattern')">
-            Please enter a valid URL
-          </mat-error>
         </mat-form-field>
         <!-- Image Preview -->
         <img
           [src]="
-            form.get('imageUrl')?.dirty && form.get('imageUrl')?.value
+            (form.get('imageUrl')?.dirty && form.get('imageUrl')?.value) ||
+            initialValues?.imageUrl
               ? form.get('imageUrl')?.value
               : '/images/image-placeholder.png'
           "
-          class="size-32 rounded border border-borderC"
+          class="size-32 min-w-32 rounded border border-borderC"
           alt="Recipe Image Preview"
         />
       </div>
@@ -135,6 +133,9 @@
         Mark as Favorite
       </mat-checkbox>
 
+      <div class="py-6">
+        <ng-content> </ng-content>
+      </div>
       <!-- Submit Button -->
       <button mat-flat-button color="primary" type="submit" class="w-full">
         Submit

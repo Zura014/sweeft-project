@@ -51,11 +51,11 @@
       <app-recipe-form
         [initialValues]="initialValues"
         (submitEvent)="onSubmit($event)"
-      ></app-recipe-form>
+      >
+        <!-- show feedback if the form is submitting -->
+        <app-loading *ngIf="isLoading()"></app-loading>
+      </app-recipe-form>
     </ng-container>
-
-    <!-- if the form is submitting -->
-    <app-loading *ngIf="isLoading()"></app-loading>
 
     <!-- Action Buttons -->
     <div class="flex gap-4">
