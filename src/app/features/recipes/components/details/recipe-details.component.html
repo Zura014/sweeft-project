@@ -1,7 +1,7 @@
 <ng-container *ngIf="currentRecipe$ | async as recipe">
-  <div class="max-w-screen-xxl px-4 xs:px-6 md:px-8 mx-auto pb-8">
+  <div class="max-w-screen-xxl px-2 xs:px-6 md:px-8 mx-auto pb-8">
     <ng-container *ngIf="!isEditing(); else editMode">
-      <div class="max-w-5xl mx-auto space-y-8 pt-8">
+      <div class="mx-auto space-y-8 pt-8">
         <!-- Image and Description Section -->
         <div class="mx-auto">
           <img
@@ -136,7 +136,7 @@
     </ng-template>
     <!-- Action Buttons -->
     <div
-      class="max-w-5xl mx-auto flex flex-col sm:flex-row gap-4 mt-4 w-full justify-end px-4 sm:px-6 md:px-8"
+      class="mx-auto flex flex-col sm:flex-row gap-4 mt-4 w-full justify-end px-4 sm:px-6 md:px-8"
     >
       <button mat-flat-button type="button" (click)="toggleEdit()">
         {{ isEditing() ? "Cancel Edit" : "Edit Recipe" }}
