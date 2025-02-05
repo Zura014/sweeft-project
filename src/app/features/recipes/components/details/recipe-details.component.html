@@ -47,14 +47,16 @@
 
     <!-- Edit Form Section -->
     <ng-container *ngIf="isEditing()" class="mt-8">
-      <h2 class="text-2xl font-medium mb-4">Edit Recipe</h2>
-      <app-recipe-form
-        [initialValues]="initialValues"
-        (submitEvent)="onSubmit($event)"
-      >
-        <!-- show feedback if the form is submitting -->
-        <app-loading *ngIf="isLoading()"></app-loading>
-      </app-recipe-form>
+      <div>
+        <h2 class="text-2xl font-medium mb-4">Edit Recipe</h2>
+        <app-recipe-form
+          [initialValues]="initialValues"
+          (submitEvent)="onSubmit($event)"
+        >
+          <!-- show feedback if the form is submitting -->
+          <app-loading *ngIf="isLoading()"></app-loading>
+        </app-recipe-form>
+      </div>
     </ng-container>
 
     <!-- Action Buttons -->
