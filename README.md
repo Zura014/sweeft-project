@@ -2,7 +2,9 @@
 
 This project is a Recipe Sharing Application built with **Angular** for the frontend and **json-server** as a mock backend. The app allows users to view, add, edit, and delete recipes with an easy-to-use interface.
 
----
+Available at https://sweeft-project-alpha.vercel.app/
+
+## Note: Since this application uses a free-tier backend hosting service on Render, the server may need a few minutes to boot up if it has been inactive. Please be patient during the initial load.
 
 ## Table of Contents
 
@@ -14,6 +16,7 @@ This project is a Recipe Sharing Application built with **Angular** for the fron
 - [Mock Backend (`db.json`)](#mock-backend-dbjson)
 - [Tailwind CSS Configuration](#tailwind-css-configuration)
 - [Scripts](#scripts)
+- [Deployment](#deployment)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -197,6 +200,15 @@ module.exports = {
 | `test`     | Runs unit tests.                                         |
 
 ---
+
+## Deployment
+
+The application is deployed and accessible at:
+
+- Frontend: https://sweeft-project-alpha.vercel.app/ (Vercel)
+- Backend: Hosted on Render
+
+Note: Due to using Render's free tier hosting, the backend server may take a few minutes to wake up if it has been inactive. This will cause a slight delay in data loading on your first visit.
 
 ## Contributing
 

@@ -126,8 +126,7 @@
         Mark as Favorite
       </mat-checkbox>
 
-      
-        <ng-content> </ng-content>
+      <ng-content> </ng-content>
       <!-- Submit Button -->
       <button mat-flat-button color="primary" type="submit" class="w-full">
         Submit
@@ -135,11 +134,15 @@
     </fieldset>
   </div>
 
-  <section>
+  <!-- Preview section -->
+  <section class="px-4">
+    <!-- Header part -->
     <header class="my-4 py-2 border-b border-b-borderC">
       <h2 class="text-2xl sm:text-3xl md:text-4xl">Preview</h2>
     </header>
+    <!-- Information dynamically updated via reactive forms -->
     <main>
+      <!-- Image preview -->
       <img
         [src]="
           (form.get('imageUrl')?.dirty && form.get('imageUrl')?.value) ||
@@ -150,6 +153,8 @@
         class="mx-auto max-h-[50vh] md:max-h-[30vh] border border-borderC"
         alt="Recipe Image Preview"
       />
+
+      <!-- Preview for all the info entered in form -->
       <section class="py-4 px-4 sm:px-6 md:px-8">
         <div class="space-y-4">
           <div class="flex justify-between items-center">
@@ -178,34 +183,35 @@
             <cdk-accordion class="w-full">
               <!-- Ingredients section -->
               <cdk-accordion-item
-                #accordionItem1="cdkAccordionItem"
+                #ingredientsAccordion="cdkAccordionItem"
                 class="accordion-item"
               >
                 <button
                   type="button"
                   class="accordion-item-header"
-                  (click)="accordionItem1.toggle()"
+                  (click)="ingredientsAccordion.toggle()"
                   tabindex="0"
                   [attr.id]="'accordion-header-' + 0"
-                  [attr.aria-expanded]="accordionItem1.expanded"
+                  [attr.aria-expanded]="ingredientsAccordion.expanded"
                   [attr.aria-controls]="'accordion-body-' + 0"
                 >
                   Ingredients
                   <span class="accordion-item-description">
-                    Click to {{ accordionItem1.expanded ? "close" : "open" }}
+                    Click to
+                    {{ ingredientsAccordion.expanded ? "close" : "open" }}
                   </span>
                 </button>
-                @if(accordionItem1.expanded) {
+                @if(ingredientsAccordion.expanded) {
                 <div
                   class="accordion-item-body"
                   role="region"
-                  [style.display]="accordionItem1.expanded ? '' : 'none'"
+                  [style.display]="ingredientsAccordion.expanded ? '' : 'none'"
                   [attr.id]="'accordion-body-' + 0"
                   [attr.aria-labelledby]="'accordion-header-' + 0"
                 >
                   <ul class="px-4 list-disc">
                     @for(ingredient of form.get('ingredients')?.value; track
-                    ingredient) {
+                    ingredient.length) {
                     <li>
                       {{ ingredient }}
                     </li>
@@ -217,28 +223,29 @@
 
               <!-- Instructions section -->
               <cdk-accordion-item
-                #accordionItem2="cdkAccordionItem"
+                #instructionsAccordion="cdkAccordionItem"
                 class="accordion-item"
               >
                 <button
                   type="button"
                   class="accordion-item-header"
-                  (click)="accordionItem2.toggle()"
+                  (click)="instructionsAccordion.toggle()"
                   tabindex="1"
                   [attr.id]="'accordion-header-' + 1"
-                  [attr.aria-expanded]="accordionItem2.expanded"
+                  [attr.aria-expanded]="instructionsAccordion.expanded"
                   [attr.aria-controls]="'accordion-body-' + 1"
                 >
                   Instructions
                   <span class="accordion-item-description">
-                    Click to {{ accordionItem2.expanded ? "close" : "open" }}
+                    Click to
+                    {{ instructionsAccordion.expanded ? "close" : "open" }}
                   </span>
                 </button>
-                @if(accordionItem2.expanded) {
+                @if(instructionsAccordion.expanded) {
                 <div
                   class="accordion-item-body"
                   role="region"
-                  [style.display]="accordionItem2.expanded ? '' : 'none'"
+                  [style.display]="instructionsAccordion.expanded ? '' : 'none'"
                   [attr.id]="'accordion-body-' + 1"
                   [attr.aria-labelledby]="'accordion-header-' + 1"
                 >
