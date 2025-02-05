@@ -1,12 +1,14 @@
 <!-- Shared form component for pages where modification is needed -->
 <form
-  class="flex justify-center w-full py-6 items-center"
+  class="grid grid-cols-1 gap-x-8 md:grid-cols-2 w-full justify-center"
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
   <div
-    class="w-full max-w-md h-full bg-white py-6 sm:py-12 md:py-16 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC"
+    class="w-full max-w-lg h-fit bg-white py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC shadow-lg"
   >
+    <header></header>
+
     <fieldset class="space-y-3">
       <!-- Title Input Field -->
       <mat-form-field appearance="outline" class="w-full">
@@ -96,7 +98,9 @@
         </mat-error>
       </mat-form-field>
 
-      <div class="flex flex-row justify-between gap-x-4 items-center">
+      <div
+        class="flex flex-col xs:flex-row justify-between gap-x-4 items-center"
+      >
         <!-- Image URL Input -->
         <mat-form-field appearance="outline" class="w-full pt-5 h-fit">
           <mat-label>Image URL</mat-label>
@@ -112,17 +116,6 @@
             Image URL is required
           </mat-error>
         </mat-form-field>
-        <!-- Image Preview -->
-        <img
-          [src]="
-            (form.get('imageUrl')?.dirty && form.get('imageUrl')?.value) ||
-            initialValues?.imageUrl
-              ? form.get('imageUrl')?.value
-              : '/images/image-placeholder.png'
-          "
-          class="size-32 min-w-32 rounded border border-borderC"
-          alt="Recipe Image Preview"
-        />
       </div>
       <!-- Favorite Checkbox -->
       <mat-checkbox
@@ -133,13 +126,138 @@
         Mark as Favorite
       </mat-checkbox>
 
-      <div class="py-6">
+      
         <ng-content> </ng-content>
-      </div>
       <!-- Submit Button -->
       <button mat-flat-button color="primary" type="submit" class="w-full">
         Submit
       </button>
     </fieldset>
   </div>
+
+  <section>
+    <header class="my-4 py-2 border-b border-b-borderC">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl">Preview</h2>
+    </header>
+    <main>
+      <img
+        [src]="
+          (form.get('imageUrl')?.dirty && form.get('imageUrl')?.value) ||
+          initialValues?.imageUrl
+            ? form.get('imageUrl')?.value
+            : '/images/image-placeholder.png'
+        "
+        class="mx-auto max-h-[50vh] md:max-h-[30vh] border border-borderC"
+        alt="Recipe Image Preview"
+      />
+      <section class="py-4 px-4 sm:px-6 md:px-8">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <!-- Main info section -->
+            <div class="w-3/4 space-y-2">
+              <h1 class="text-3xl font-medium w-full">
+                {{ form.get("title")?.value }}
+              </h1>
+              <p class="text-gray-700 w-full">
+                {{ form.get("description")?.value }}
+              </p>
+            </div>
+            <!-- Favorite/Unfavorite button -->
+            <div class="size-fit">
+              <button type="button">
+                @if(form.get('isFavorite')?.value){
+                <img src="icons/favorite.svg" class="size-8" alt="favorite" />
+                } @else{
+                <img src="icons/unfavorite.svg" class="size-8" alt="favorite" />
+                }
+              </button>
+            </div>
+          </div>
+          <!-- Accordion for displaying ingredients and instructions for recipe -->
+          <div>
+            <cdk-accordion class="w-full">
+              <!-- Ingredients section -->
+              <cdk-accordion-item
+                #accordionItem1="cdkAccordionItem"
+                class="accordion-item"
+              >
+                <button
+                  type="button"
+                  class="accordion-item-header"
+                  (click)="accordionItem1.toggle()"
+                  tabindex="0"
+                  [attr.id]="'accordion-header-' + 0"
+                  [attr.aria-expanded]="accordionItem1.expanded"
+                  [attr.aria-controls]="'accordion-body-' + 0"
+                >
+                  Ingredients
+                  <span class="accordion-item-description">
+                    Click to {{ accordionItem1.expanded ? "close" : "open" }}
+                  </span>
+                </button>
+                @if(accordionItem1.expanded) {
+                <div
+                  class="accordion-item-body"
+                  role="region"
+                  [style.display]="accordionItem1.expanded ? '' : 'none'"
+                  [attr.id]="'accordion-body-' + 0"
+                  [attr.aria-labelledby]="'accordion-header-' + 0"
+                >
+                  <ul class="px-4 list-disc">
+                    @for(ingredient of form.get('ingredients')?.value; track
+                    ingredient) {
+                    <li>
+                      {{ ingredient }}
+                    </li>
+                    }
+                  </ul>
+                </div>
+                }
+              </cdk-accordion-item>
+
+              <!-- Instructions section -->
+              <cdk-accordion-item
+                #accordionItem2="cdkAccordionItem"
+                class="accordion-item"
+              >
+                <button
+                  type="button"
+                  class="accordion-item-header"
+                  (click)="accordionItem2.toggle()"
+                  tabindex="1"
+                  [attr.id]="'accordion-header-' + 1"
+                  [attr.aria-expanded]="accordionItem2.expanded"
+                  [attr.aria-controls]="'accordion-body-' + 1"
+                >
+                  Instructions
+                  <span class="accordion-item-description">
+                    Click to {{ accordionItem2.expanded ? "close" : "open" }}
+                  </span>
+                </button>
+                @if(accordionItem2.expanded) {
+                <div
+                  class="accordion-item-body"
+                  role="region"
+                  [style.display]="accordionItem2.expanded ? '' : 'none'"
+                  [attr.id]="'accordion-body-' + 1"
+                  [attr.aria-labelledby]="'accordion-header-' + 1"
+                >
+                  <ul>
+                    <li
+                      *ngFor="
+                        let step of form.get('instructions')?.value?.split('\n')
+                      "
+                    >
+                      {{ step }}
+                    </li>
+                  </ul>
+                </div>
+                }
+              </cdk-accordion-item>
+            </cdk-accordion>
+          </div>
+        </div>
+      </section>
+    </main>
+  </section>
 </form>

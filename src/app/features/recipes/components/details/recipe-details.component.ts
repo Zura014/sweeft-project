@@ -27,6 +27,7 @@ import { RecipeForm } from '../../types/recipe-form.type';
 import { RecipeFormComponent } from '../form/recipe-form.component';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { MatButton } from '@angular/material/button';
+import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 
 @Component({
   selector: 'app-recipe-details',
@@ -36,6 +37,8 @@ import { MatButton } from '@angular/material/button';
     MatButton,
     RecipeFormComponent,
     LoadingComponent,
+    CdkAccordion,
+    CdkAccordionItem,
   ],
   templateUrl: './recipe-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +50,8 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   fb = inject(FormBuilder);
 
   currentRecipe$!: Observable<RecipeI>;
+
+  expandedIndex = 0;
 
   initialValues: RecipeForm = {
     title: '',

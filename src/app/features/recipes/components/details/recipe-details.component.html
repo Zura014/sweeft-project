@@ -1,67 +1,138 @@
-<div class="max-w-screen-xxl mx-auto px-4 py-8">
-  <div *ngIf="currentRecipe$ | async as recipe" class="space-y-8">
-    <!-- Header Section -->
-    <header class="border-b border-borderC pb-6">
-      <div class="flex justify-between items-center">
-        <h1 class="text-4xl font-medium">{{ recipe.title }}</h1>
-        <button (click)="toggleFavorite(recipe.id, recipe.isFavorite)">
-          @if(recipe.isFavorite){
-          <img src="icons/favorite.svg" class="size-8" alt="favorite" />
-          } @else{
-          <img src="icons/unfavorite.svg" class="size-8" alt="favorite" />
-          }
-        </button>
+<ng-container *ngIf="currentRecipe$ | async as recipe">
+  <div class="max-w-screen-xxl px-4 xs:px-6 md:px-8 mx-auto pb-8">
+    <ng-container *ngIf="!isEditing(); else editMode">
+      <div class="max-w-5xl mx-auto space-y-8 pt-8">
+        <!-- Image and Description Section -->
+        <div class="mx-auto">
+          <img
+            [src]="recipe.imageUrl"
+            [alt]="recipe.title"
+            class="w-full max-h-[400px] object-cover sm:rounded-lg shadow-lg"
+          />
+        </div>
+
+        <section class="px-4 sm:px-6 md:px-8">
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <!-- Main info section -->
+              <div class="w-3/4 space-y-2">
+                <h1 class="text-3xl font-medium w-full">{{ recipe.title }}</h1>
+                <p class="text-gray-700 w-full">{{ recipe.description }}</p>
+              </div>
+              <!-- Favorite/Unfavorite button -->
+              <div class="size-fit">
+                <button (click)="toggleFavorite(recipe.id, recipe.isFavorite)">
+                  @if(recipe.isFavorite){
+                  <img src="icons/favorite.svg" class="size-8" alt="favorite" />
+                  } @else{
+                  <img
+                    src="icons/unfavorite.svg"
+                    class="size-8"
+                    alt="favorite"
+                  />
+                  }
+                </button>
+              </div>
+            </div>
+            <!-- Accordion for displaying ingredients and instructions for recipe -->
+            <div>
+              <cdk-accordion class="w-full">
+                <!-- Ingredients section -->
+                <cdk-accordion-item
+                  #accordionItem1="cdkAccordionItem"
+                  class="accordion-item"
+                >
+                  <button
+                    class="accordion-item-header"
+                    (click)="accordionItem1.toggle()"
+                    tabindex="0"
+                    [attr.id]="'accordion-header-' + 0"
+                    [attr.aria-expanded]="accordionItem1.expanded"
+                    [attr.aria-controls]="'accordion-body-' + 0"
+                  >
+                    Ingredients
+                    <span class="accordion-item-description">
+                      Click to {{ accordionItem1.expanded ? "close" : "open" }}
+                    </span>
+                  </button>
+                  @if(accordionItem1.expanded) {
+                  <div
+                    class="accordion-item-body"
+                    role="region"
+                    [style.display]="accordionItem1.expanded ? '' : 'none'"
+                    [attr.id]="'accordion-body-' + 0"
+                    [attr.aria-labelledby]="'accordion-header-' + 0"
+                  >
+                    <ul class="px-4 list-disc">
+                      @for(ingredient of recipe.ingredients; track ingredient) {
+                      <li>
+                        {{ ingredient }}
+                      </li>
+                      }
+                    </ul>
+                  </div>
+                  }
+                </cdk-accordion-item>
+
+                <!-- Instructions section -->
+                <cdk-accordion-item
+                  #accordionItem2="cdkAccordionItem"
+                  class="accordion-item"
+                >
+                  <button
+                    class="accordion-item-header"
+                    (click)="accordionItem2.toggle()"
+                    tabindex="1"
+                    [attr.id]="'accordion-header-' + 1"
+                    [attr.aria-expanded]="accordionItem2.expanded"
+                    [attr.aria-controls]="'accordion-body-' + 1"
+                  >
+                    Instructions
+                    <span class="accordion-item-description">
+                      Click to {{ accordionItem2.expanded ? "close" : "open" }}
+                    </span>
+                  </button>
+                  @if(accordionItem2.expanded) {
+                  <div
+                    class="accordion-item-body"
+                    role="region"
+                    [style.display]="accordionItem2.expanded ? '' : 'none'"
+                    [attr.id]="'accordion-body-' + 1"
+                    [attr.aria-labelledby]="'accordion-header-' + 1"
+                  >
+                    <ul>
+                      <li *ngFor="let step of recipe.instructions.split('\n')">
+                        {{ step }}
+                      </li>
+                    </ul>
+                  </div>
+                  }
+                </cdk-accordion-item>
+              </cdk-accordion>
+            </div>
+          </div>
+        </section>
       </div>
-    </header>
-
-    <!-- Image and Description Section -->
-    <div class="grid md:grid-cols-2 gap-8">
-      <img
-        [src]="recipe.imageUrl"
-        [alt]="recipe.title"
-        class="w-full max-h-[400px] object-cover rounded-lg shadow-lg"
-      />
-      <div class="space-y-4">
-        <h2 class="text-2xl font-medium">Description</h2>
-        <p class="text-gray-700">{{ recipe.description }}</p>
-      </div>
-    </div>
-
-    <!-- Ingredients Section -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-medium">Ingredients</h2>
-      <ul class="list-disc pl-6 space-y-2">
-        <li *ngFor="let ingredient of recipe.ingredients" class="text-gray-700">
-          {{ ingredient }}
-        </li>
-      </ul>
-    </div>
-
-    <!-- Instructions Section -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-medium">Instructions</h2>
-      <ul>
-        <li *ngFor="let step of recipe.instructions.split('\n')">{{ step }}</li>
-      </ul>
-    </div>
-
+    </ng-container>
     <!-- Edit Form Section -->
-    <ng-container *ngIf="isEditing()" class="mt-8">
-      <div>
-        <h2 class="text-2xl font-medium mb-4">Edit Recipe</h2>
+    <ng-template #editMode>
+      <div class="mt-8">
         <app-recipe-form
           [initialValues]="initialValues"
           (submitEvent)="onSubmit($event)"
         >
           <!-- show feedback if the form is submitting -->
-          <app-loading *ngIf="isLoading()"></app-loading>
+          <div *ngIf="isLoading()" class="py-6">
+            <app-loading></app-loading>
+          </div>
         </app-recipe-form>
       </div>
-    </ng-container>
-
+    </ng-template>
     <!-- Action Buttons -->
-    <div class="flex gap-4">
-      <button mat-stroked-button type="button" (click)="toggleEdit()">
+    <div
+      class="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-end px-4 sm:px-6 md:px-8"
+    >
+      <button mat-flat-button type="button" (click)="toggleEdit()">
         {{ isEditing() ? "Cancel Edit" : "Edit Recipe" }}
       </button>
       <button
@@ -74,4 +145,4 @@
       </button>
     </div>
   </div>
-</div>
+</ng-container>

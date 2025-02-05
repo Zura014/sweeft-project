@@ -4,7 +4,6 @@ import { RecipeService } from '../../services/recipe.service';
 import { CommonModule } from '@angular/common';
 import { RecipeFormComponent } from '../form/recipe-form.component';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
-
 @Component({
   selector: 'app-recipe-submission',
   imports: [CommonModule, RecipeFormComponent, LoadingComponent],

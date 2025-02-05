@@ -1,11 +1,15 @@
 <div class="max-w-screen-xxl mx-auto px-4 py-8">
   <header>
-    <h1 class="text-4xl pb-4 border-b border-b-borderC">Recipe Submission</h1>
+    <h1 class="text-4xl pb-4 mb-4 border-b border-b-borderC">
+      Recipe Submission
+    </h1>
   </header>
   <section>
     <app-recipe-form (submitEvent)="onSubmit($event)">
       <!-- show feedback if the form is submitting -->
-      <app-loading *ngIf="isLoading()"></app-loading>
+      <div *ngIf="isLoading()" class="py-6">
+        <app-loading></app-loading>
+      </div>
     </app-recipe-form>
   </section>
 </div>

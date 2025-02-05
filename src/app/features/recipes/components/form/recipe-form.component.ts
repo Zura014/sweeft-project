@@ -25,6 +25,7 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
@@ -38,10 +39,14 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
     MatCheckboxModule,
     MatIconModule,
     MatButtonModule,
+    CdkAccordion,
+    CdkAccordionItem,
   ],
 })
 export class RecipeFormComponent implements OnInit {
   private liveAnnouncer = inject(LiveAnnouncer); // Accessibility support
+
+  expandedIndex = 0;
 
   /*
    * I would've used signals instead of decorators,

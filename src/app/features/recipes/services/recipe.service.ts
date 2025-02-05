@@ -1,19 +1,13 @@
-import {
-  HttpClient,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { RecipeI } from '../interfaces/recipe.interface';
 import { UpdateRecipeI } from '../interfaces/update-recipe.interface';
 import { CreateRecipeI } from '../interfaces/create-recipe.interface';
 import { RecipeFilterType } from '../types/recipe-filter.type';
 import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 /**
  * Service responsible for handling all recipe-related HTTP operations
@@ -26,7 +20,8 @@ import { ToastrService } from 'ngx-toastr';
 export class RecipeService {
   private readonly http = inject(HttpClient);
   private readonly toastr = inject(ToastrService);
-  private readonly apiUrl = environment.apiUrl + '/recipes';
+  private readonly router = inject(Router);
+  private readonly apiUrl = `${environment.apiUrl}/recipes`;
 
   // BehaviorSubject to maintain and broadcast recipe state changes
   private readonly recipesSubject = new BehaviorSubject<RecipeI[]>([]);
@@ -90,6 +85,8 @@ export class RecipeService {
           progressBar: true,
           messageClass: 'ease-in',
         });
+
+        this.router.navigate(['/details', createdRecipe.id]);
       })
     );
   }
