@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { RecipeForm } from '../../types/recipe-form.type';
 import { RecipeFormControls } from '../../types/recipe-form-controls.type';
@@ -26,6 +27,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
+
+/**
+ * Component for configuring recipe and displaying its preview.
+ * Handles modification of recipes.
+ * Uses OnPush change detection for better performance.
+ */
+
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
@@ -42,11 +50,12 @@ import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
     CdkAccordion,
     CdkAccordionItem,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeFormComponent implements OnInit {
   private liveAnnouncer = inject(LiveAnnouncer); // Accessibility support
 
-  expandedIndex = 0;
+  expandedIndex = 0; // Index for the expanded accordion section
 
   /*
    * I would've used signals instead of decorators,

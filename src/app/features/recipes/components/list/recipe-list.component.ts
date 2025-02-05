@@ -35,10 +35,14 @@ import {
 import { RecipeFilterType } from '../../types/recipe-filter.type';
 import { MatProgressBar } from '@angular/material/progress-bar';
 
+/**
+ * Component for displaying and managing all recipes.
+ * Handles viewing, filtering, and favoriting recipes.
+ * Uses OnPush change detection for better performance.
+ */
+
 @Component({
   selector: 'app-recipe-list',
-  templateUrl: './recipe-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush, // Using OnPush strategy for better performance
   imports: [
     NgIf,
     AsyncPipe,
@@ -50,6 +54,8 @@ import { MatProgressBar } from '@angular/material/progress-bar';
     LoadingComponent,
     MatProgressBar,
   ],
+  templateUrl: './recipe-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   // Injecting the RecipeService for data fetching

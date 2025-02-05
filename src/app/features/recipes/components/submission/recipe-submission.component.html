@@ -1,8 +1,8 @@
-<div class="max-w-screen-xxl px-2 xs:px-6 md:px-8 mx-auto pb-8">
-  <header>
-    <h1 class="text-4xl pb-4 mb-4 border-b border-b-borderC">
-      Recipe Submission
-    </h1>
+<div class="max-w-screen-xxl space-y-6 p-4 md:p-6 mx-auto">
+  <header
+    class="flex w-full justify-between border-b border-b-borderC items-center pb-4"
+  >
+    <h1 class="text-4xl">Recipe Submission</h1>
   </header>
   <section>
     <app-recipe-form (submitEvent)="onSubmit($event)">

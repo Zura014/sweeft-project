@@ -25,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class HeaderComponent implements OnInit {
   router = inject(Router);
 
-  isLoading$!: Observable<boolean>;
+  isLoading$!: Observable<boolean>; // loading state
 
   _showLoaderEvents$!: Observable<boolean>;
   _hideLoaderEvents$!: Observable<boolean>;
@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Handling loading state as navigation happens for good UX
     this._showLoaderEvents$ = this.router.events.pipe(
       filter((event) => event instanceof NavigationStart),
       map(() => true)

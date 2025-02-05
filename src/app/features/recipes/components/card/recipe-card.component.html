@@ -1,15 +1,20 @@
 <div class="max-w-md mx-auto bg-white rounded-2xl border border-gray-200 p-4">
   <div class="relative">
+    <!-- recipe image with dynamic source and alt text, ensuring a responsive display -->
+
     <img
       [src]="recipe?.imageUrl"
       [alt]="recipe?.title"
       class="w-full h-48 object-cover rounded-md mb-4"
     />
+
+    <!-- favorite toggle button positioned absolutely on the top right corner -->
     <button
       type="button"
       (click)="toggleFavorite()"
       class="absolute top-2 right-2 bg-white rounded-full p-2 flex items-center"
     >
+      <!-- dynamic icon for favorite/unfavorite state -->
       <img
         [src]="
           recipe?.isFavorite ? 'icons/favorite.svg' : 'icons/unfavorite.svg'
@@ -19,6 +24,8 @@
       />
     </button>
   </div>
+
+  <!-- box with recipe title and description -->
   <div>
     <h2 class="text-xl font-semibold truncate text-gray-800">
       {{ recipe?.title }}
@@ -27,6 +34,8 @@
       {{ recipe?.description }}
     </p>
   </div>
+
+  <!-- container for action buttons, aligned to the right -->
   <div class="mt-4 flex justify-end gap-2">
     <a
       [routerLink]="['/details/', recipe?.id]"
