@@ -40,10 +40,14 @@
 
   <!-- box with recipe title and description -->
   <section>
-    <h2 class="text-xl font-semibold w-full truncate text-gray-800">
+    <h2
+      class="text-xl font-semibold w-full text-ellipsis break-words line-clamp-2 text-gray-800"
+    >
       {{ recipe?.title }}
     </h2>
-    <p class="text-sm text-gray-600 w-full truncate">
+    <p
+      class="text-sm text-gray-600 w-full text-ellipsis break-words line-clamp-2 h-10"
+    >
       {{ recipe?.description }}
     </p>
   </section>

@@ -136,6 +136,10 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
               this.isLoading.set(false);
               // Update initialValues here with the new form data
               this.initialValues = { ...form };
+            }),
+            catchError(() => {
+              this.isLoading.set(false);
+              return EMPTY;
             })
           )
         ),

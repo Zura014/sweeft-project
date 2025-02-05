@@ -2,9 +2,9 @@
   <main class="max-w-screen-xxl px-2 xs:px-6 md:px-8 mx-auto pb-8">
     <!-- Details view -->
     <ng-container *ngIf="!isEditing(); else editMode">
-      <section class="mx-auto space-y-8 pt-8">
+      <section class="flex flex-col gap-y-6 gap-x-8 md:flex-row w-full pt-8">
         <!-- Image and Description Section -->
-        <div class="mx-auto">
+        <div class="w-full">
           <img
             [src]="recipe.imageUrl"
             [alt]="recipe.title"
@@ -12,13 +12,19 @@
           />
         </div>
 
-        <section class="px-4 sm:px-6 md:px-8">
+        <section class="w-full">
           <div class="space-y-4">
             <div class="flex justify-between items-center">
               <!-- Main info section -->
               <div class="w-3/4 space-y-2">
-                <h1 class="text-3xl font-medium w-full">{{ recipe.title }}</h1>
-                <p class="text-gray-700 w-full">{{ recipe.description }}</p>
+                <h1
+                  class="text-3xl font-medium w-full text-ellipsis break-words line-clamp-2"
+                >
+                  {{ recipe.title }}
+                </h1>
+                <p class="text-gray-700 w-full text-ellipsis break-words line-clamp-2">
+                  {{ recipe.description }}
+                </p>
               </div>
               <!-- Favorite/Unfavorite button -->
               <div class="size-fit">
@@ -118,6 +124,23 @@
               </cdk-accordion>
             </div>
           </div>
+          <ng-content select="[actions-buttons]" />
+          <!-- Action Buttons -->
+          <div
+            class="mx-auto flex flex-col sm:flex-row gap-4 mt-4 w-full justify-end"
+          >
+            <button mat-flat-button type="button" (click)="toggleEdit()">
+              {{ isEditing() ? "Cancel Edit" : "Edit Recipe" }}
+            </button>
+            <button
+              mat-stroked-button
+              style="border-color: red; color: red"
+              (click)="deleteRecipe(recipe.id)"
+              type="button"
+            >
+              Delete Recipe
+            </button>
+          </div>
         </section>
       </section>
     </ng-container>
@@ -128,28 +151,33 @@
           [initialValues]="initialValues"
           (submitEvent)="onSubmit($event)"
         >
-          <!-- show feedback if the form is submitting via content projection -->
-          <div *ngIf="isLoading()" class="py-6">
-            <app-loading></app-loading>
-          </div>
+          <ng-container loading>
+            <!-- show feedback if the form is submitting via content projection -->
+            <div *ngIf="isLoading()" class="py-6">
+              <app-loading></app-loading>
+            </div>
+          </ng-container>
+
+          <ng-container actions-buttos>
+            <!-- Action Buttons -->
+            <div
+              class="mx-auto flex flex-col sm:flex-row gap-4 w-full justify-end mt-4"
+            >
+              <button mat-flat-button type="button" (click)="toggleEdit()">
+                {{ isEditing() ? "Cancel Edit" : "Edit Recipe" }}
+              </button>
+              <button
+                mat-stroked-button
+                style="border-color: red; color: red"
+                (click)="deleteRecipe(recipe.id)"
+                type="button"
+              >
+                Delete Recipe
+              </button>
+            </div>
+          </ng-container>
         </app-recipe-form>
       </main>
     </ng-template>
-    <!-- Action Buttons -->
-    <div
-      class="mx-auto flex flex-col sm:flex-row gap-4 mt-4 w-full justify-end px-4 sm:px-6 md:px-8"
-    >
-      <button mat-flat-button type="button" (click)="toggleEdit()">
-        {{ isEditing() ? "Cancel Edit" : "Edit Recipe" }}
-      </button>
-      <button
-        mat-stroked-button
-        style="border-color: red; color: red"
-        (click)="deleteRecipe(recipe.id)"
-        type="button"
-      >
-        Delete Recipe
-      </button>
-    </div>
   </main>
 </ng-container>
