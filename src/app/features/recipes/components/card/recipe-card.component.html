@@ -1,5 +1,5 @@
-<div class="max-w-md mx-auto bg-white rounded-2xl border border-gray-200 p-4">
-  <div class="relative">
+<main class="max-w-md mx-auto bg-white rounded-2xl border border-gray-200 p-4">
+  <header class="relative">
     <!-- recipe image with dynamic source and alt text, ensuring a responsive display -->
 
     <img
@@ -23,19 +23,19 @@
         class="w-5 h-5"
       />
     </button>
-  </div>
+  </header>
 
   <!-- box with recipe title and description -->
-  <div>
-    <h2 class="text-xl font-semibold truncate text-gray-800">
+  <section>
+    <h2 class="text-xl font-semibold w-full truncate text-gray-800">
       {{ recipe?.title }}
     </h2>
-    <p class="text-sm text-gray-600 truncate">
+    <p class="text-sm text-gray-600 w-full truncate">
       {{ recipe?.description }}
     </p>
-  </div>
+  </section>
 
-  <!-- container for action buttons, aligned to the right -->
+  <!-- container for action buttons -->
   <div class="mt-4 flex justify-end gap-2">
     <a
       [routerLink]="['/details/', recipe?.id]"
@@ -44,4 +44,4 @@
       See more
     </a>
   </div>
-</div>
+</main>

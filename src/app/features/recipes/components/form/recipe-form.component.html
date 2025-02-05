@@ -1,10 +1,9 @@
-<!-- Shared form component for pages where recipe modification is needed -->
 <form
-  class="grid grid-cols-1 gap-x-8 md:grid-cols-2 w-full gap-y-8 justify-center"
+  class="w-full flex flex-col md:flex-row gap-x-8 gap-y-8 justify-center"
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
-  <div
+  <main
     class="mx-auto w-full max-w-lg h-fit bg-white py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC shadow-lg"
   >
     <fieldset class="space-y-3">
@@ -124,19 +123,19 @@
         Mark as Favorite
       </mat-checkbox>
 
-      <ng-content> </ng-content>
+      <ng-content />
       <!-- Submit Button -->
       <button mat-flat-button color="primary" type="submit" class="w-full">
         Submit
       </button>
     </fieldset>
-  </div>
+  </main>
 
   <!-- Preview section -->
+  <!-- Information dynamically updated via reactive forms -->
   <section class="px-4">
-    <!-- Information dynamically updated via reactive forms -->
-    <main>
-      <!-- Image preview -->
+    <!-- Image preview -->
+    <header>
       <img
         [src]="
           (form.get('imageUrl')?.dirty && form.get('imageUrl')?.value) ||
@@ -147,118 +146,116 @@
         class="mx-auto max-h-[50vh] w-full object-cover border border-borderC rounded-lg"
         alt="Recipe Image Preview"
       />
+    </header>
 
-      <!-- Preview for all the info entered in form -->
-      <section class="py-4 sm:px-2 md:px-4">
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <!-- Main info section -->
-            <div class="w-3/4 space-y-2">
-              <h1 class="text-3xl font-medium w-full">
-                {{ form.get("title")?.value }}
-              </h1>
-              <p class="text-gray-700 w-full">
-                {{ form.get("description")?.value }}
-              </p>
-            </div>
-            <!-- Favorite/Unfavorite button -->
-            <div class="size-fit">
-              <button type="button">
-                @if(form.get('isFavorite')?.value){
-                <img src="icons/favorite.svg" class="size-8" alt="favorite" />
-                } @else{
-                <img src="icons/unfavorite.svg" class="size-8" alt="favorite" />
-                }
-              </button>
-            </div>
-          </div>
-          <!-- Accordion for displaying ingredients and instructions for recipe -->
-          <div>
-            <cdk-accordion class="w-full">
-              <!-- Ingredients section -->
-              <cdk-accordion-item
-                #ingredientsAccordion="cdkAccordionItem"
-                class="accordion-item"
-              >
-                <button
-                  type="button"
-                  class="accordion-item-header"
-                  (click)="ingredientsAccordion.toggle()"
-                  tabindex="0"
-                  [attr.id]="'accordion-header-' + 0"
-                  [attr.aria-expanded]="ingredientsAccordion.expanded"
-                  [attr.aria-controls]="'accordion-body-' + 0"
-                >
-                  Ingredients
-                  <span class="accordion-item-description">
-                    Click to
-                    {{ ingredientsAccordion.expanded ? "close" : "open" }}
-                  </span>
-                </button>
-                @if(ingredientsAccordion.expanded) {
-                <div
-                  class="accordion-item-body"
-                  role="region"
-                  [style.display]="ingredientsAccordion.expanded ? '' : 'none'"
-                  [attr.id]="'accordion-body-' + 0"
-                  [attr.aria-labelledby]="'accordion-header-' + 0"
-                >
-                  <ul class="px-4 list-disc">
-                    @for(ingredient of form.get('ingredients')?.value; track
-                    ingredient.length) {
-                    <li>
-                      {{ ingredient }}
-                    </li>
-                    }
-                  </ul>
-                </div>
-                }
-              </cdk-accordion-item>
-
-              <!-- Instructions section -->
-              <cdk-accordion-item
-                #instructionsAccordion="cdkAccordionItem"
-                class="accordion-item"
-              >
-                <button
-                  type="button"
-                  class="accordion-item-header"
-                  (click)="instructionsAccordion.toggle()"
-                  tabindex="1"
-                  [attr.id]="'accordion-header-' + 1"
-                  [attr.aria-expanded]="instructionsAccordion.expanded"
-                  [attr.aria-controls]="'accordion-body-' + 1"
-                >
-                  Instructions
-                  <span class="accordion-item-description">
-                    Click to
-                    {{ instructionsAccordion.expanded ? "close" : "open" }}
-                  </span>
-                </button>
-                @if(instructionsAccordion.expanded) {
-                <div
-                  class="accordion-item-body"
-                  role="region"
-                  [style.display]="instructionsAccordion.expanded ? '' : 'none'"
-                  [attr.id]="'accordion-body-' + 1"
-                  [attr.aria-labelledby]="'accordion-header-' + 1"
-                >
-                  <ul>
-                    <li
-                      *ngFor="
-                        let step of form.get('instructions')?.value?.split('\n')
-                      "
-                    >
-                      {{ step }}
-                    </li>
-                  </ul>
-                </div>
-                }
-              </cdk-accordion-item>
-            </cdk-accordion>
-          </div>
+    <!-- Preview for all the info entered in form -->
+    <section class="py-4 sm:px-2 md:px-4 space-y-4">
+      <div class="flex justify-between items-center">
+        <!-- Main info section -->
+        <div class="w-3/4 space-y-2">
+          <h1 class="text-3xl font-medium w-full">
+            {{ form.get("title")?.value }}
+          </h1>
+          <p class="text-gray-700 w-full">
+            {{ form.get("description")?.value }}
+          </p>
         </div>
-      </section>
-    </main>
+        <!-- Favorite/Unfavorite button -->
+        <div class="size-fit">
+          <button type="button">
+            @if(form.get('isFavorite')?.value){
+            <img src="icons/favorite.svg" class="size-8" alt="favorite" />
+            } @else{
+            <img src="icons/unfavorite.svg" class="size-8" alt="favorite" />
+            }
+          </button>
+        </div>
+      </div>
+      <!-- Accordion for displaying ingredients and instructions for recipe -->
+      <div>
+        <cdk-accordion class="w-full">
+          <!-- Ingredients section -->
+          <cdk-accordion-item
+            #ingredientsAccordion="cdkAccordionItem"
+            class="accordion-item"
+          >
+            <button
+              type="button"
+              class="accordion-item-header"
+              (click)="ingredientsAccordion.toggle()"
+              tabindex="0"
+              [attr.id]="'accordion-header-' + 0"
+              [attr.aria-expanded]="ingredientsAccordion.expanded"
+              [attr.aria-controls]="'accordion-body-' + 0"
+            >
+              Ingredients
+              <span class="accordion-item-description">
+                Click to
+                {{ ingredientsAccordion.expanded ? "close" : "open" }}
+              </span>
+            </button>
+            @if(ingredientsAccordion.expanded) {
+            <div
+              class="accordion-item-body"
+              role="region"
+              [style.display]="ingredientsAccordion.expanded ? '' : 'none'"
+              [attr.id]="'accordion-body-' + 0"
+              [attr.aria-labelledby]="'accordion-header-' + 0"
+            >
+              <ul class="px-4 list-disc">
+                @for(ingredient of form.get('ingredients')?.value; track
+                ingredient.length) {
+                <li>
+                  {{ ingredient }}
+                </li>
+                }
+              </ul>
+            </div>
+            }
+          </cdk-accordion-item>
+
+          <!-- Instructions section -->
+          <cdk-accordion-item
+            #instructionsAccordion="cdkAccordionItem"
+            class="accordion-item"
+          >
+            <button
+              type="button"
+              class="accordion-item-header"
+              (click)="instructionsAccordion.toggle()"
+              tabindex="1"
+              [attr.id]="'accordion-header-' + 1"
+              [attr.aria-expanded]="instructionsAccordion.expanded"
+              [attr.aria-controls]="'accordion-body-' + 1"
+            >
+              Instructions
+              <span class="accordion-item-description">
+                Click to
+                {{ instructionsAccordion.expanded ? "close" : "open" }}
+              </span>
+            </button>
+            @if(instructionsAccordion.expanded) {
+            <div
+              class="accordion-item-body"
+              role="region"
+              [style.display]="instructionsAccordion.expanded ? '' : 'none'"
+              [attr.id]="'accordion-body-' + 1"
+              [attr.aria-labelledby]="'accordion-header-' + 1"
+            >
+              <ul>
+                <li
+                  *ngFor="
+                    let step of form.get('instructions')?.value?.split('\n')
+                  "
+                >
+                  {{ step }}
+                </li>
+              </ul>
+            </div>
+            }
+          </cdk-accordion-item>
+        </cdk-accordion>
+      </div>
+    </section>
   </section>
 </form>

@@ -1,7 +1,8 @@
 <ng-container *ngIf="currentRecipe$ | async as recipe">
-  <div class="max-w-screen-xxl px-2 xs:px-6 md:px-8 mx-auto pb-8">
+  <main class="max-w-screen-xxl px-2 xs:px-6 md:px-8 mx-auto pb-8">
+    <!-- Details view -->
     <ng-container *ngIf="!isEditing(); else editMode">
-      <div class="mx-auto space-y-8 pt-8">
+      <section class="mx-auto space-y-8 pt-8">
         <!-- Image and Description Section -->
         <div class="mx-auto">
           <img
@@ -118,21 +119,21 @@
             </div>
           </div>
         </section>
-      </div>
+      </section>
     </ng-container>
-    <!-- Edit Form Section -->
+    <!-- Edit Form -->
     <ng-template #editMode>
-      <div class="mt-8">
+      <main class="mt-8">
         <app-recipe-form
           [initialValues]="initialValues"
           (submitEvent)="onSubmit($event)"
         >
-          <!-- show feedback if the form is submitting -->
+          <!-- show feedback if the form is submitting via content projection -->
           <div *ngIf="isLoading()" class="py-6">
             <app-loading></app-loading>
           </div>
         </app-recipe-form>
-      </div>
+      </main>
     </ng-template>
     <!-- Action Buttons -->
     <div
@@ -150,5 +151,5 @@
         Delete Recipe
       </button>
     </div>
-  </div>
+  </main>
 </ng-container>
