@@ -21,14 +21,12 @@ This project is a Recipe Sharing Application built with **Angular** for the fron
 
 ## Features
 
-- *View Recipes:* Browse a gallery of recipes with titles, descriptions, and images.
-- *Add New Recipes:* Submit new recipes including title, ingredients, instructions, and an image.
-- *Edit/Delete Recipes:* Update or remove recipes directly from the UI.
-- *Favorites:* Mark and filter favorite recipes.
-- *Responsive Design:* With Tailwind CSS for a seamless experience across devices.
-- *Mock Backend:* Utilizes json-server for data management.
-
-
+- **View Recipes:** Browse a gallery of recipes with titles, descriptions, and images.
+- **Add New Recipes:** Submit new recipes including title, ingredients, instructions, and an image.
+- **Edit/Delete Recipes:** Update or remove recipes directly from the UI.
+- **Favorites:** Mark and filter favorite recipes.
+- **Responsive Design:** With Tailwind CSS for a seamless experience across devices.
+- **Mock Backend:** Utilizes json-server for data management.
 
 ---
 
@@ -52,7 +50,7 @@ Ensure you have the following installed on your machine:
 2. Navigate to the project directory:
 
    ```bash
-   cd recipe-sharing-app
+   cd sweeft-project
    ```
 
 3. Install dependencies:
@@ -189,14 +187,15 @@ module.exports = {
 
 ## Scripts
 
-| Script     | Description                                                  |
-| ---------- | ------------------------------------------------------------ |
-| `start`    | Starts both frontend and backend servers simultaneously.     |
-| `frontend` | Runs the Angular development server only.                    |
-| `backend`  | Initiates the mock backend server.                           |
-| `build`    | Builds the Angular app for production.                       |
-| `watch`    | Watches for changes and rebuilds the app.                    |
-| `test`     | Runs unit tests.                                             |
+| Script     | Description                                              |
+| ---------- | -------------------------------------------------------- |
+| `start`    | Starts both frontend and backend servers simultaneously. |
+| `frontend` | Runs the Angular development server only.                |
+| `backend`  | Initiates the mock backend server.                       |
+| `build`    | Builds the Angular app for production.                   |
+| `watch`    | Watches for changes and rebuilds the app.                |
+| `test`     | Runs unit tests.                                         |
+
 ---
 
 ## Contributing
