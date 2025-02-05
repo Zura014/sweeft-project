@@ -12,6 +12,7 @@ import { RecipeService } from '../../services/recipe.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { Subject, takeUntil } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 /**
  * Component for displaying individual recipe cards
@@ -21,8 +22,9 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [RouterLink, MatButtonModule, MatCardModule, MatIconModule],
+  imports: [NgIf, RouterLink, MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './recipe-card.component.html',
+  styleUrl: './recipe-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeCardComponent implements OnDestroy {
@@ -34,6 +36,8 @@ export class RecipeCardComponent implements OnDestroy {
   @Input() recipe?: RecipeI; // receives recipe value which is displayed in card template
 
   private destroy$ = new Subject<void>();
+
+  imageLoaded = false;
 
   // Toggles the favorite status of a recipe
   toggleFavorite(): void {

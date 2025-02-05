@@ -1,10 +1,10 @@
 <form
-  class="w-full flex flex-col md:flex-row gap-x-8 gap-y-8 justify-center"
+  class="w-full flex flex-col md:flex-row gap-x-8 gap-y-8 items-center md:justify-between"
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
   <main
-    class="mx-auto w-full max-w-lg h-fit bg-white py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC shadow-lg"
+    class="md:m-0 max-w-md md:max-w-xs lg:max-w-lg h-fit bg-white py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC shadow-lg"
   >
     <fieldset class="space-y-3">
       <!-- Title Input Field -->
@@ -99,7 +99,7 @@
         class="flex flex-col xs:flex-row justify-between gap-x-4 items-center"
       >
         <!-- Image URL Input -->
-        <mat-form-field appearance="outline" class="w-full pt-5 h-fit">
+        <mat-form-field appearance="outline" class="w-full h-fit">
           <mat-label>Image URL</mat-label>
           <input
             matInput
@@ -133,9 +133,9 @@
 
   <!-- Preview section -->
   <!-- Information dynamically updated via reactive forms -->
-  <section class="px-4">
+  <section class="px-4 w-full lg:w-1/2">
     <!-- Image preview -->
-    <header>
+    <header class="w-full">
       <img
         [src]="
           (form.get('imageUrl')?.dirty && form.get('imageUrl')?.value) ||
@@ -143,7 +143,7 @@
             ? form.get('imageUrl')?.value
             : '/images/image-placeholder.png'
         "
-        class="mx-auto max-h-[50vh] w-full object-cover border border-borderC rounded-lg"
+        class="mx-auto h-[40vh] w-full object-cover border border-borderC rounded-lg"
         alt="Recipe Image Preview"
       />
     </header>

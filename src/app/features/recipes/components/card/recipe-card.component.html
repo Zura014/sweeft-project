@@ -2,11 +2,24 @@
   <header class="relative">
     <!-- recipe image with dynamic source and alt text, ensuring a responsive display -->
 
-    <img
-      [src]="recipe?.imageUrl"
-      [alt]="recipe?.title"
-      class="w-full h-48 object-cover rounded-md mb-4"
-    />
+    <!-- Image preview with placeholder (for loading state) -->
+    <div class="relative">
+      <div class="animation-pulse">
+        <img
+          *ngIf="!recipe?.imageUrl || !imageLoaded"
+          src="images/image-placeholder.png"
+          alt="Placeholder"
+          class="w-full h-48 object-cover rounded-md mb-4"
+        />
+      </div>
+      <img
+        [src]="recipe?.imageUrl"
+        [alt]="recipe?.title"
+        class="w-full h-48 object-cover rounded-md mb-4"
+        (load)="imageLoaded = true"
+        [hidden]="!imageLoaded"
+      />
+    </div>
 
     <!-- favorite toggle button positioned absolutely on the top right corner -->
     <button

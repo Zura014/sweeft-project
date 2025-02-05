@@ -4,7 +4,9 @@ This project is a Recipe Sharing Application built with **Angular** for the fron
 
 Available at https://sweeft-project-alpha.vercel.app/
 
-## Note: Since this application uses a free-tier backend hosting service on Render, the server may need a few minutes to boot up if it has been inactive. Please be patient during the initial load.
+### Note: Since this application uses a free-tier backend hosting service on Render, the server may need a few minutes to boot up if it has been inactive. Please be patient during the initial load.
+
+---
 
 ## Table of Contents
 
@@ -197,7 +199,6 @@ module.exports = {
 | `backend`  | Initiates the mock backend server.                       |
 | `build`    | Builds the Angular app for production.                   |
 | `watch`    | Watches for changes and rebuilds the app.                |
-| `test`     | Runs unit tests.                                         |
 
 ---
 
