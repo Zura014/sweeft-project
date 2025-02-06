@@ -20,11 +20,6 @@ body {
   border-right: none;
 }
 
-.accordion {
-  display: block;
-  max-width: 500px;
-}
-
 .accordion-item {
   display: block;
   border: solid 1px #ccc;

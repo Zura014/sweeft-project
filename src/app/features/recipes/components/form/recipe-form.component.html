@@ -1,10 +1,10 @@
 <form
-  class="w-full flex flex-col md:flex-row gap-x-8 gap-y-8 items-center md:items-start md:justify-between"
+  class="w-full flex flex-col md:flex-row md:-x-6 lg:gap-x-8 gap-y-8 items-center md:items-start md:justify-between"
   [formGroup]="form"
   (ngSubmit)="submitForm()"
 >
   <main
-    class="md:m-0 max-w-md md:max-w-xs lg:max-w-lg h-fit bg-white py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC shadow-lg"
+    class="md:m-0 w-full md:w-9/12 lg:w-11/12 h-fit bg-white py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 rounded-lg border border-borderC shadow-lg"
   >
     <fieldset class="space-y-3">
       <!-- Title Input Field -->
@@ -133,7 +133,9 @@
 
   <!-- Preview section -->
   <!-- Information dynamically updated via reactive forms -->
-  <section class="px-4 w-full lg:w-1/2">
+  <section
+    class="px-4 w-full md:max-w-sm lg:max-w-lg xl:max-w-xl xxl:max-w-2xl"
+  >
     <!-- Image preview -->
     <header class="w-full">
       <img
@@ -149,8 +151,8 @@
     </header>
 
     <!-- Preview for all the info entered in form -->
-    <section class="py-4 space-y-4">
-      <div class="flex justify-between items-center">
+    <section class="w-full py-4 space-y-4">
+      <div class="w-full flex justify-between items-center">
         <!-- Main info section -->
         <div class="w-3/4 space-y-2">
           <h1
@@ -176,8 +178,10 @@
         </div>
       </div>
       <!-- Accordion for displaying ingredients and instructions for recipe -->
-      <div>
-        <cdk-accordion class="w-full">
+      <div class="w-full">
+        <cdk-accordion
+          class="mx-auto accordion max-w-full md:max-w-sm lg:max-w-full"
+        >
           <!-- Ingredients section -->
           <cdk-accordion-item
             #ingredientsAccordion="cdkAccordionItem"
@@ -206,11 +210,12 @@
               [attr.id]="'accordion-body-' + 0"
               [attr.aria-labelledby]="'accordion-header-' + 0"
             >
-              <ul class="px-4 list-disc">
+              <ul class="px-4 list-disc text-ellipsis break-words">
                 @for(ingredient of form.get('ingredients')?.value; track
                 ingredient.length) {
                 <li>
                   {{ ingredient }}
+                  fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                 </li>
                 }
               </ul>
@@ -246,7 +251,7 @@
               [attr.id]="'accordion-body-' + 1"
               [attr.aria-labelledby]="'accordion-header-' + 1"
             >
-              <ul>
+              <ul class="text-ellipsis break-words">
                 <li
                   *ngFor="
                     let step of form.get('instructions')?.value?.split('\n')

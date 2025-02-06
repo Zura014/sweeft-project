@@ -4,7 +4,7 @@
     <ng-container *ngIf="!isEditing(); else editMode">
       <section class="flex flex-col gap-y-6 gap-x-8 md:flex-row w-full pt-8">
         <!-- Image and Description Section -->
-        <div class="w-full">
+        <div class="w-full md:w-1/2">
           <img
             [src]="recipe.imageUrl"
             [alt]="recipe.title"
@@ -12,7 +12,7 @@
           />
         </div>
 
-        <section class="w-full">
+        <section class="w-full md:w-1/2">
           <div class="space-y-4">
             <div class="flex justify-between items-center">
               <!-- Main info section -->
@@ -22,7 +22,9 @@
                 >
                   {{ recipe.title }}
                 </h1>
-                <p class="text-gray-700 w-full text-ellipsis break-words line-clamp-2">
+                <p
+                  class="text-gray-700 w-full text-ellipsis break-words line-clamp-2"
+                >
                   {{ recipe.description }}
                 </p>
               </div>
@@ -73,7 +75,7 @@
                     [attr.id]="'accordion-body-' + 0"
                     [attr.aria-labelledby]="'accordion-header-' + 0"
                   >
-                    <ul class="px-4 list-disc">
+                    <ul class="px-4 list-disc text-ellipsis break-words">
                       @for(ingredient of recipe.ingredients; track ingredient) {
                       <li>
                         {{ ingredient }}
@@ -113,7 +115,7 @@
                     [attr.id]="'accordion-body-' + 1"
                     [attr.aria-labelledby]="'accordion-header-' + 1"
                   >
-                    <ul>
+                    <ul class="text-ellipsis break-words">
                       <li *ngFor="let step of recipe.instructions.split('\n')">
                         {{ step }}
                       </li>
