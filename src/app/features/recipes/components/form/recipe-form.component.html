@@ -17,6 +17,8 @@
           formControlName="title"
           placeholder="Title"
           aria-label="Recipe Title"
+          minlength="3"
+          maxlength="51"
         />
         <mat-error *ngIf="form.get('title')?.hasError('required')">
           Title is required
@@ -32,14 +34,16 @@
       <!-- Description Input Field -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Description</mat-label>
-        <input
+        <textarea
           matInput
+          minlength="10"
+          maxlength="250"
           type="text"
           id="description"
           formControlName="description"
           placeholder="Description"
           aria-label="Recipe Description"
-        />
+        ></textarea>
         <mat-error *ngIf="form.get('description')?.hasError('required')">
           Description is required
         </mat-error>
@@ -47,7 +51,7 @@
           Description must be at least 10 characters long
         </mat-error>
         <mat-error *ngIf="form.get('description')?.hasError('maxlength')">
-          Description cannot exceed 500 characters
+          Description cannot exceed 250 characters
         </mat-error>
       </mat-form-field>
 
@@ -70,6 +74,8 @@
         <input
           placeholder="New ingredient..."
           [matChipInputFor]="reactiveChipGrid"
+          minlength="3"
+          maxlength="36"
           (matChipInputTokenEnd)="addIngredient($event)"
         />
         <mat-error *ngIf="form.get('ingredients')?.hasError('required')">
@@ -84,6 +90,8 @@
           matInput
           id="instructions"
           formControlName="instructions"
+          minlength="20"
+          maxlength="500"
           placeholder="Instructions"
           aria-label="Recipe Instructions"
         ></textarea>
@@ -92,6 +100,9 @@
         </mat-error>
         <mat-error *ngIf="form.get('instructions')?.hasError('minlength')">
           Instructions must be at least 20 characters long
+        </mat-error>
+        <mat-error *ngIf="form.get('instructions')?.hasError('maxlength')">
+          Instructions must be at most 500 characters long
         </mat-error>
       </mat-form-field>
 
@@ -155,16 +166,27 @@
       <div class="w-full flex justify-between items-center">
         <!-- Main info section -->
         <div class="w-3/4 space-y-2">
-          <h1
-            class="text-3xl font-medium w-full text-ellipsis break-words line-clamp-2"
-          >
-            {{ form.get("title")?.value }}
-          </h1>
-          <p
-            class="text-gray-700 w-full text-ellipsis break-words line-clamp-2"
-          >
-            {{ form.get("description")?.value }}
-          </p>
+          <div class="w-full">
+            <h1 class="text-3xl font-medium w-full text-ellipsis break-words">
+              {{ form.get("title")?.value }}
+            </h1>
+          </div>
+          <div class="w-full">
+            <p
+              class="text-gray-700 w-full text-ellipsis break-words"
+              [ngClass]="{ 'line-clamp-2': !seeMore() }"
+            >
+              {{ form.get("description")?.value }}
+            </p>
+            @if(form.get('description')?.value!.trim().length > 128) {
+            <a
+              class="cursor-pointer underline underline-offset-2 text-blue-700"
+              (click)="toggleSeeMore()"
+            >
+              {{ seeMore() ? "See less..." : "See more..." }}
+            </a>
+            }
+          </div>
         </div>
         <!-- Favorite/Unfavorite button -->
         <div class="size-fit">
@@ -215,7 +237,6 @@
                 ingredient.length) {
                 <li>
                   {{ ingredient }}
-                  fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                 </li>
                 }
               </ul>
