@@ -74,7 +74,6 @@
         <input
           placeholder="New ingredient..."
           [matChipInputFor]="reactiveChipGrid"
-          minlength="3"
           maxlength="36"
           (matChipInputTokenEnd)="addIngredient($event)"
         />
