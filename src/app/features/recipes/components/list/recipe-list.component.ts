@@ -110,12 +110,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       switchMap(([query, filter]) =>
         this.recipeService.getAllRecipes(query ?? undefined, filter).pipe(
           catchError(() => {
-            this.isLoading.set(false);
+            this.isLoading.set(false); // handling loading state.
             return EMPTY;
           }),
           tap(() => {
-            this.isLoading.set(false);
-          }) // handling loading state.
+            this.isLoading.set(false); // handling loading state.
+          })
         )
       )
     );
