@@ -57,8 +57,6 @@ export class RecipeFormComponent implements OnInit {
 
   expandedIndex = 0; // Index for the expanded accordion section
 
-  seeMore = signal<boolean>(false); // state for displaying more text on view
-
   /*
    * I would've used signals instead of decorators,
    * but task description suggested using decorators.
@@ -124,10 +122,6 @@ export class RecipeFormComponent implements OnInit {
         this.ingredients.set(this.initialValues.ingredients);
       }
     }
-  }
-
-  toggleSeeMore(): void {
-    this.seeMore.update((val) => !val);
   }
 
   /**

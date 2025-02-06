@@ -28,7 +28,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      toastr.error(errorMessage ?? '', 'Something went wrong!', {
+      toastr.error(errorMessage, 'Something went wrong!', {
         timeOut: 5000, // Duration (in milliseconds)
         positionClass: 'toast-bottom-right', // Position of the toast
         progressBar: true,

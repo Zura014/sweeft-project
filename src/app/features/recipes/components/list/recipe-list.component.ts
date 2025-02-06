@@ -99,6 +99,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
     this.isLoading.set(true);
 
+    /**
+     * I could have done query filtering locally too,
+     * but I prefered using recipes$.pipe(map(...)) or
+     * just mapping getAllRecipes function observable.
+     * with same logic.
+     */
     this.recipes$ = combineLatest([search$, filter$]).pipe(
       takeUntil(this.destroy$), // Unsubscribe when component is destroyed
       switchMap(([query, filter]) =>

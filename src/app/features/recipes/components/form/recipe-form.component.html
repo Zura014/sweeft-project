@@ -172,20 +172,9 @@
             </h1>
           </div>
           <div class="w-full">
-            <p
-              class="text-gray-700 w-full text-ellipsis break-words"
-              [ngClass]="{ 'line-clamp-2': !seeMore() }"
-            >
+            <p class="text-gray-700 w-full text-ellipsis break-words">
               {{ form.get("description")?.value }}
             </p>
-            @if(form.get('description')?.value!.trim().length > 128) {
-            <a
-              class="cursor-pointer underline underline-offset-2 text-blue-700"
-              (click)="toggleSeeMore()"
-            >
-              {{ seeMore() ? "See less..." : "See more..." }}
-            </a>
-            }
           </div>
         </div>
         <!-- Favorite/Unfavorite button -->

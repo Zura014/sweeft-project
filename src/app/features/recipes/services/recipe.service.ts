@@ -43,6 +43,7 @@ export class RecipeService {
     query?: string,
     filter?: RecipeFilterType
   ): Observable<RecipeI[]> {
+    // creating params to send query request.
     let params = new HttpParams();
 
     if (query) {
