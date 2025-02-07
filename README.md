@@ -75,7 +75,7 @@ Ensure you have the following installed on your machine:
    ```
 
 - Frontend: Accessible at [http://localhost:4200](http://localhost:4200)
-- Mock Backend: Available at [http://localhost:10000/recipes](http://localhost:10000/recipes)
+- Mock Backend: Available at [http://localhost:3000/recipes](http://localhost:3000/recipes)
 
 ### Individual Servers (Optional)
 
