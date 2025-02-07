@@ -101,7 +101,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
     /**
      * I could have done query filtering locally too,
-     * but I prefered using recipes$.pipe(map(...)) or
+     * but I prefered using json-server to do the filtering,
+     * otherwise I would use recipes$.pipe(map(...)) or
      * just mapping getAllRecipes function observable.
      * with same logic.
      */
