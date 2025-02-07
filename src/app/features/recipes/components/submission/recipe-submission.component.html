@@ -6,10 +6,12 @@
   </header>
   <section>
     <app-recipe-form (submitEvent)="onSubmit($event)">
-      <!-- show feedback if the form is submitting -->
-      <div *ngIf="isLoading()" class="py-6">
-        <app-loading></app-loading>
-      </div>
+      <ng-container loading>
+        <!-- show feedback if the form is submitting via content projection -->
+        <div *ngIf="isLoading()" class="py-6">
+          <app-loading></app-loading>
+        </div>
+      </ng-container>
     </app-recipe-form>
   </section>
 </main>
